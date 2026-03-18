@@ -1,0 +1,16 @@
+C:\Users\liber\OneDrive\Documentos\IT 145\vs stuff\project dingleberry\bin\Debug\net10.0-windows\project dingleberry.exe
+C:\Users\liber\OneDrive\Documentos\IT 145\vs stuff\project dingleberry\bin\Debug\net10.0-windows\project dingleberry.deps.json
+C:\Users\liber\OneDrive\Documentos\IT 145\vs stuff\project dingleberry\bin\Debug\net10.0-windows\project dingleberry.runtimeconfig.json
+C:\Users\liber\OneDrive\Documentos\IT 145\vs stuff\project dingleberry\bin\Debug\net10.0-windows\project dingleberry.dll
+C:\Users\liber\OneDrive\Documentos\IT 145\vs stuff\project dingleberry\bin\Debug\net10.0-windows\project dingleberry.pdb
+C:\Users\liber\OneDrive\Documentos\IT 145\vs stuff\project dingleberry\obj\Debug\net10.0-windows\project_dingleberry.Form1.resources
+C:\Users\liber\OneDrive\Documentos\IT 145\vs stuff\project dingleberry\obj\Debug\net10.0-windows\project dingleberry.csproj.GenerateResource.cache
+C:\Users\liber\OneDrive\Documentos\IT 145\vs stuff\project dingleberry\obj\Debug\net10.0-windows\project dingleberry.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\liber\OneDrive\Documentos\IT 145\vs stuff\project dingleberry\obj\Debug\net10.0-windows\project dingleberry.AssemblyInfoInputs.cache
+C:\Users\liber\OneDrive\Documentos\IT 145\vs stuff\project dingleberry\obj\Debug\net10.0-windows\project dingleberry.AssemblyInfo.cs
+C:\Users\liber\OneDrive\Documentos\IT 145\vs stuff\project dingleberry\obj\Debug\net10.0-windows\project dingleberry.csproj.CoreCompileInputs.cache
+C:\Users\liber\OneDrive\Documentos\IT 145\vs stuff\project dingleberry\obj\Debug\net10.0-windows\project dingleberry.dll
+C:\Users\liber\OneDrive\Documentos\IT 145\vs stuff\project dingleberry\obj\Debug\net10.0-windows\refint\project dingleberry.dll
+C:\Users\liber\OneDrive\Documentos\IT 145\vs stuff\project dingleberry\obj\Debug\net10.0-windows\project dingleberry.pdb
+C:\Users\liber\OneDrive\Documentos\IT 145\vs stuff\project dingleberry\obj\Debug\net10.0-windows\project dingleberry.genruntimeconfig.cache
+C:\Users\liber\OneDrive\Documentos\IT 145\vs stuff\project dingleberry\obj\Debug\net10.0-windows\ref\project dingleberry.dll
