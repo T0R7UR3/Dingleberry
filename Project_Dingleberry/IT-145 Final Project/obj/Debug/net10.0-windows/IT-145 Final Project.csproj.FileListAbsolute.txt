@@ -15,3 +15,14 @@ C:\Users\bethd\OneDrive\Desktop\Spring 2026\Found. in App Development\IT145\IT-1
 C:\Users\bethd\OneDrive\Desktop\Spring 2026\Found. in App Development\IT145\IT-145 Final Project\IT-145 Final Project\obj\Debug\net10.0-windows\IT-145 Final Project.genruntimeconfig.cache
 C:\Users\bethd\OneDrive\Desktop\Spring 2026\Found. in App Development\IT145\IT-145 Final Project\IT-145 Final Project\obj\Debug\net10.0-windows\ref\IT-145 Final Project.dll
 C:\Users\bethd\OneDrive\Desktop\Spring 2026\Found. in App Development\IT145\IT-145 Final Project\IT-145 Final Project\obj\Debug\net10.0-windows\IT_145_Final_Project.playButtonForm.resources
+C:\Users\liber\OneDrive\Documentos\GitHub\Dingleberry\Project_Dingleberry\IT-145 Final Project\obj\Debug\net10.0-windows\IT_145_Final_Project.John_Stick.resources
+C:\Users\liber\OneDrive\Documentos\GitHub\Dingleberry\Project_Dingleberry\IT-145 Final Project\obj\Debug\net10.0-windows\IT_145_Final_Project.playButtonForm.resources
+C:\Users\liber\OneDrive\Documentos\GitHub\Dingleberry\Project_Dingleberry\IT-145 Final Project\obj\Debug\net10.0-windows\IT-145 Final Project.csproj.GenerateResource.cache
+C:\Users\liber\OneDrive\Documentos\GitHub\Dingleberry\Project_Dingleberry\IT-145 Final Project\obj\Debug\net10.0-windows\IT-145 Final Project.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\liber\OneDrive\Documentos\GitHub\Dingleberry\Project_Dingleberry\IT-145 Final Project\obj\Debug\net10.0-windows\IT-145 Final Project.AssemblyInfoInputs.cache
+C:\Users\liber\OneDrive\Documentos\GitHub\Dingleberry\Project_Dingleberry\IT-145 Final Project\obj\Debug\net10.0-windows\IT-145 Final Project.AssemblyInfo.cs
+C:\Users\liber\OneDrive\Documentos\GitHub\Dingleberry\Project_Dingleberry\IT-145 Final Project\obj\Debug\net10.0-windows\IT-145 Final Project.csproj.CoreCompileInputs.cache
+C:\Users\liber\OneDrive\Documentos\GitHub\Dingleberry\Project_Dingleberry\IT-145 Final Project\obj\Debug\net10.0-windows\IT-145 Final Project.sourcelink.json
+C:\Users\liber\OneDrive\Documentos\GitHub\Dingleberry\Project_Dingleberry\IT-145 Final Project\obj\Debug\net10.0-windows\IT-145 Final Project.dll
+C:\Users\liber\OneDrive\Documentos\GitHub\Dingleberry\Project_Dingleberry\IT-145 Final Project\obj\Debug\net10.0-windows\refint\IT-145 Final Project.dll
+C:\Users\liber\OneDrive\Documentos\GitHub\Dingleberry\Project_Dingleberry\IT-145 Final Project\obj\Debug\net10.0-windows\IT-145 Final Project.pdb
