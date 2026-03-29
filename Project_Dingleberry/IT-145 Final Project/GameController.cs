@@ -17,8 +17,7 @@ namespace Project_Dingleberry
             enemies = new List<Entity>();
 
             // Initialize Player with the image filename
-            // Make sure "Player.png" is in your bin/Debug/Images folder!
-            player = new Player("Player.png");
+                       player = new Player("Player.png");
             player.setPos(200, 200);
 
             // Add a test enemy
@@ -27,7 +26,6 @@ namespace Project_Dingleberry
             enemies.Add(testEnemy);
         }
 
-        // FIX: This is the method John_Stick.cs was looking for!
         public void HandleKeyPress(Keys key)
         {
             // Supports both WASD and Arrow Keys
@@ -42,7 +40,7 @@ namespace Project_Dingleberry
             // 1. Handle Movement Logic & Screen Boundaries
             player.clampToScreen(gameForm.ClientSize.Width, gameForm.ClientSize.Height);
 
-            // 2. Handle Collisions (Example)
+            // 2. Handle Collisions
             foreach (var enemy in enemies)
             {
                 if (player.Hitbox.IntersectsWith(enemy.Hitbox))

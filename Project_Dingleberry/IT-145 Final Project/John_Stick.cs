@@ -38,12 +38,10 @@ namespace Project_Dingleberry
             controller.Draw(e.Graphics);
         }
 
-        // FIX: The Designer needs these functions to exist for the buttons to work!
+     
         private void play_Click(object sender, EventArgs e)
         {
-            // If you have a separate game form, you can open it here:
-            // playButtonForm nextForm = new playButtonForm();
-            // nextForm.Show();
+         
 
             MessageBox.Show("Game Started!");
         }
