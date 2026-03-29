@@ -14,12 +14,13 @@ namespace Project_Dingleberry
         public GameController(Form form)
         {
             gameForm = form;
-            enemies = new List<Entity>();
+            enemies = new List<Entity>(); // Keep this as Entity so the list can hold any type of Entity
 
             player = new Player("Player.png");
             player.setPos(350, 450);
 
-            Entity testEnemy = new Entity("Enemy.png");
+            // CHANGED: Now instantiating the new Enemy class instead of the base Entity class
+            Enemy testEnemy = new Enemy("Enemy.png");
             testEnemy.setPos(350, 100);
             enemies.Add(testEnemy);
         }
