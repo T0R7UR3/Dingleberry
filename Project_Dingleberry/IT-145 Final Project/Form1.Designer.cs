@@ -1,6 +1,6 @@
-﻿namespace IT_145_Final_Project
+﻿namespace Project_Dingleberry
 {
-    partial class John_Stick
+    public partial class John_Stick
     {
         /// <summary>
         ///  Required designer variable.
