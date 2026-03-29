@@ -23,7 +23,7 @@ namespace Project_Dingleberry
             if (entityImage != null) g.DrawImage(entityImage, posX, posY);
         }
 
-        // Use this for collision: if (player.Hitbox.IntersectsWith(enemy.Hitbox))
+        // Trying this for collision: if (player.Hitbox.IntersectsWith(enemy.Hitbox))
         public Rectangle Hitbox => new Rectangle(posX, posY, entityImage?.Width ?? 0, entityImage?.Height ?? 0);
 
         public void setPos(int x, int y)
