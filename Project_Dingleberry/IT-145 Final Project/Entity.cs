@@ -5,7 +5,7 @@ using System.IO;
 
 namespace Project_Dingleberry
 {
-    internal class Entity
+    public class Entity
     {
         protected int posX;
         protected int posY;
@@ -41,8 +41,13 @@ namespace Project_Dingleberry
             }
             catch
             {
-                // Creates a fallback placeholder if the image is missing
-                entityImage = new Bitmap(30, 30);
+                // Create a bright red 30x30 square if the image is missing
+                Bitmap tempImg = new Bitmap(30, 30);
+                using (Graphics g = Graphics.FromImage(tempImg))
+                {
+                    g.Clear(Color.Red);
+                }
+                entityImage = tempImg;
             }
         }
     }

@@ -7,58 +7,41 @@ namespace Project_Dingleberry
 {
     internal class GameController
     {
-        private John_Stick gameForm;
+        private Form gameForm;
         private Player player;
         private List<Entity> enemies;
 
-        public GameController(John_Stick form)
+        public GameController(Form form)
         {
             gameForm = form;
             enemies = new List<Entity>();
 
-            // Initialize Player with the image filename
-                       player = new Player("Player.png");
-            player.setPos(200, 200);
+            player = new Player("Player.png");
+            player.setPos(350, 450);
 
-            // Add a test enemy
             Entity testEnemy = new Entity("Enemy.png");
-            testEnemy.setPos(400, 100);
+            testEnemy.setPos(350, 100);
             enemies.Add(testEnemy);
         }
 
-        public void HandleKeyPress(Keys key)
-        {
-            // Supports both WASD and Arrow Keys
-            if (key == Keys.W || key == Keys.Up) player.moveUp();
-            if (key == Keys.S || key == Keys.Down) player.moveDown();
-            if (key == Keys.A || key == Keys.Left) player.moveLeft();
-            if (key == Keys.D || key == Keys.Right) player.moveRight();
-        }
+        // Helper to let GameStage talk to the player's bools
+        public Player GetPlayer() => player;
 
         public void Update()
         {
-            // 1. Handle Movement Logic & Screen Boundaries
+            // Move based on held keys
+            player.ProcessMovement();
+
+            // Keep on screen
             player.clampToScreen(gameForm.ClientSize.Width, gameForm.ClientSize.Height);
 
-            // 2. Handle Collisions
-            foreach (var enemy in enemies)
-            {
-                if (player.Hitbox.IntersectsWith(enemy.Hitbox))
-                {
-                    // Logic for when player touches enemy (e.g., take damage)
-                }
-            }
-
-            // 3. Refresh the screen (calls OnPaint in John_Stick.cs)
+            // Redraw
             gameForm.Invalidate();
         }
 
         public void Draw(Graphics g)
         {
-            // Draw Player
             player.drawEntity(g);
-
-            // Draw all Enemies
             foreach (var enemy in enemies)
             {
                 enemy.drawEntity(g);
