@@ -9,22 +9,32 @@ namespace Project_Dingleberry
     {
         private Form gameForm;
         private Player player;
-        private List<Entity> enemies;
+        private List<Enemy> enemies;
 
-        public GameController(Form form)
+                public GameController(Form form)
         {
             gameForm = form;
-            enemies = new List<Entity>(); // Keep this as Entity so the list can hold any type of Entity
+            enemies = new List<Enemy>();
 
             player = new Player("Player.png");
             player.setPos(350, 450);
 
-            // CHANGED: Now instantiating the new Enemy class instead of the base Entity class
-            Enemy testEnemy = new Enemy("Enemy.png");
-            testEnemy.setPos(350, 100);
-            enemies.Add(testEnemy);
-        }
+            // Spawn a Chaser
+            Enemy chaser = new Enemy("Enemy.png", EnemyType.Chaser);
+            chaser.setPos(100, 100);
+            enemies.Add(chaser);
 
+            // Spawn a Bouncer
+            Enemy bouncer = new Enemy("Enemy.png", EnemyType.Bouncer);
+            bouncer.setPos(600, 100);
+            enemies.Add(bouncer);
+
+            // Spawn a Drifter
+            Enemy drifter = new Enemy("Enemy.png", EnemyType.Drifter);
+            drifter.setPos(350, 200);
+            enemies.Add(drifter);
+        }
+  
         // Helper to let GameStage talk to the player's bools
         public Player GetPlayer() => player;
 
@@ -35,6 +45,12 @@ namespace Project_Dingleberry
 
             // Keep on screen
             player.clampToScreen(gameForm.ClientSize.Width, gameForm.ClientSize.Height);
+
+            // NEW: Update all enemies
+            foreach (var enemy in enemies)
+            {
+                enemy.Update(player, gameForm.ClientSize.Width, gameForm.ClientSize.Height);
+            }
 
             // Redraw
             gameForm.Invalidate();

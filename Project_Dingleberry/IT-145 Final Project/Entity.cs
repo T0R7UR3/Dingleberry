@@ -32,6 +32,18 @@ namespace Project_Dingleberry
             posY = y;
         }
 
+       
+        public int GetX()
+        {
+            return posX;
+        }
+
+        public int GetY()
+        {
+            return posY;
+        }
+   
+
         public void setImage(string fileName)
         {
             try

@@ -1,22 +1,69 @@
 ﻿using System;
-using System.Drawing;
 
 namespace Project_Dingleberry
 {
-    // The ":" symbol makes Enemy inherit from your existing Entity class
+    public enum EnemyType
+    {
+        Chaser,
+        Bouncer,
+        Drifter
+    }
+
     public class Enemy : Entity
     {
-        // Constructor passes the fileName to the base Entity class to handle the image
-        public Enemy(string fileName) : base(fileName)
+        private EnemyType type; 
+
+        public EnemyType Type   
         {
-            // The starting coordinates are set in the GameController, 
-            // Initialize enemy-specific stats (like health or speed) here later.
+            get { return type; }
+            set { type = value; }
+        }
+      
+
+        private int speed = 3;
+        private int speedX = 4;
+        private int speedY = 4;
+        private Random rand = new Random();
+
+        public Enemy(string fileName, EnemyType enemyType) : base(fileName)
+        {
+           
+            Type = enemyType;
         }
 
-        // Added an Update method so we have a place to put AI/movement logic later
-        public void Update()
+        public void Update(Player target, int screenWidth, int screenHeight)
         {
-            // TODO: Add movement or attack logic in future tasks
+            switch (Type)
+            {
+                case EnemyType.Chaser:
+                    if (posX < target.GetX()) posX += speed;
+                    if (posX > target.GetX()) posX -= speed;
+                    if (posY < target.GetY()) posY += speed;
+                    if (posY > target.GetY()) posY -= speed;
+                    break;
+
+                case EnemyType.Bouncer:
+                    posX += speedX;
+                    posY += speedY;
+
+                    if (posX <= 0 || posX >= screenWidth - 30) speedX *= -1;
+                    if (posY <= 0 || posY >= screenHeight - 30) speedY *= -1;
+                    break;
+
+                case EnemyType.Drifter:
+                    posX += speedX;
+                    posY += speedY;
+
+                    if (posX <= 0 || posX >= screenWidth - 30) speedX *= -1;
+                    if (posY <= 0 || posY >= screenHeight - 30) speedY *= -1;
+
+                    if (rand.Next(0, 100) < 2)
+                    {
+                        speedX = rand.Next(-4, 5);
+                        speedY = rand.Next(-4, 5);
+                    }
+                    break;
+            }
         }
     }
 }
