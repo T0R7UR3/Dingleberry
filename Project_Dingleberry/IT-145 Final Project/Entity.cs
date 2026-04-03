@@ -10,9 +10,12 @@ namespace Project_Dingleberry
         protected int posX;
         protected int posY;
         protected Image? entityImage;
+        protected Color fallbackColor; // NEW: Stores the placeholder color
 
-        public Entity(string fileName)
+        // NEW: Constructor now asks for a color
+        public Entity(string fileName, Color fallback)
         {
+            fallbackColor = fallback;
             setImage(fileName);
             posX = 100;
             posY = 100;
@@ -23,8 +26,7 @@ namespace Project_Dingleberry
             if (entityImage != null) g.DrawImage(entityImage, posX, posY);
         }
 
-        // Trying this for collision: if (player.Hitbox.IntersectsWith(enemy.Hitbox))
-        public Rectangle Hitbox => new Rectangle(posX, posY, entityImage?.Width ?? 0, entityImage?.Height ?? 0);
+        public Rectangle Hitbox => new Rectangle(posX, posY, entityImage?.Width ?? 30, entityImage?.Height ?? 30);
 
         public void setPos(int x, int y)
         {
@@ -32,17 +34,8 @@ namespace Project_Dingleberry
             posY = y;
         }
 
-       
-        public int GetX()
-        {
-            return posX;
-        }
-
-        public int GetY()
-        {
-            return posY;
-        }
-   
+        public int GetX() => posX;
+        public int GetY() => posY;
 
         public void setImage(string fileName)
         {
@@ -53,11 +46,11 @@ namespace Project_Dingleberry
             }
             catch
             {
-                // Create a bright red 30x30 square if the image is missing
+                // Draws the custom color instead of always being red!
                 Bitmap tempImg = new Bitmap(30, 30);
                 using (Graphics g = Graphics.FromImage(tempImg))
                 {
-                    g.Clear(Color.Red);
+                    g.Clear(fallbackColor);
                 }
                 entityImage = tempImg;
             }

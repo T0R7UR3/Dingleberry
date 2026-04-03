@@ -14,7 +14,8 @@ namespace Project_Dingleberry
 
         public int Lives => lives;
 
-        public Player(string fileName) : base(fileName)
+        // NEW: Passed Color.Blue to the base Entity
+        public Player(string fileName) : base(fileName, Color.Blue)
         {
             this.posX = 640;
             this.posY = 360;
@@ -50,7 +51,6 @@ namespace Project_Dingleberry
 
         public bool playerHit()
         {
-            // Set to 1.5 seconds for a fast-paced, balanced arcade feel
             if ((DateTime.Now - lastHit).TotalSeconds >= 1.5)
             {
                 lastHit = DateTime.Now;
@@ -58,6 +58,12 @@ namespace Project_Dingleberry
                 return true;
             }
             return false;
+        }
+
+        // NEW: Allows the Life item to heal the player
+        public void AddLife()
+        {
+            lives += 1;
         }
     }
 }

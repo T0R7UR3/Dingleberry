@@ -25,7 +25,8 @@ namespace Project_Dingleberry
         private int speedY = 4;
         private Random rand = new Random();
 
-        public Enemy(string fileName, EnemyType enemyType) : base(fileName)
+        // NEW: Passed Color.Red to the base Entity
+        public Enemy(string fileName, EnemyType enemyType) : base(fileName, Color.Red)
         {
             Type = enemyType;
         }
