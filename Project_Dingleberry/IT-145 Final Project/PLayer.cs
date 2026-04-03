@@ -70,11 +70,12 @@ namespace Project_Dingleberry
                 lastHit = DateTime.Now;
                 lives -= 1;
 
-                Debug.WriteLine("Player was hit.");
+                Debug.WriteLine($"Player was hit. {lives} lives remaining.");
 
                 if (lives <= 0)
                 {
                     // Game over.
+                    Debug.WriteLine("Player died.");
                 }
             }
         }
