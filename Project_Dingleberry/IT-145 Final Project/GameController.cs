@@ -8,7 +8,7 @@ namespace Project_Dingleberry
 {
     internal class GameController
     {
-        private Form gameForm;
+        private GameStage gameForm;
         private Player player;
         private List<Enemy> enemies;
 
@@ -26,7 +26,7 @@ namespace Project_Dingleberry
         private int itemSpawnTimer = 0;
         private int itemSpawnInterval = 300;
 
-        public GameController(Form form)
+        public GameController(GameStage form)
         {
             gameForm = form;
             enemies = new List<Enemy>();
@@ -83,7 +83,7 @@ namespace Project_Dingleberry
             while (!safeSpotFound)
             {
                 spawnX = rand.Next(0, gameForm.ClientSize.Width - 32);
-                spawnY = rand.Next(40, gameForm.ClientSize.Height - 32); // Keep out of HUD
+                spawnY = rand.Next(40, gameForm.ClientSize.Height - 32);
 
                 double diffX = spawnX - player.GetX();
                 double diffY = spawnY - player.GetY();
@@ -105,7 +105,6 @@ namespace Project_Dingleberry
         {
             if (isGameOver || isPaused) return;
 
-            // Difficulty Escalation
             int currentSeconds = (int)survivalTimer.Elapsed.TotalSeconds;
             if (currentSeconds / 15 >= difficultyLevel)
             {
@@ -117,7 +116,6 @@ namespace Project_Dingleberry
             player.ProcessMovement();
             player.clampToScreen(gameForm.ClientSize.Width, gameForm.ClientSize.Height);
 
-            // Enemy Spawning
             spawnTimer++;
             if (spawnTimer >= spawnInterval && enemies.Count < maxEnemies)
             {
@@ -125,7 +123,6 @@ namespace Project_Dingleberry
                 spawnTimer = 0;
             }
 
-            // Item Spawning (Overlap Prevention)
             itemSpawnTimer++;
             if (itemSpawnTimer >= itemSpawnInterval && activeItems.Count < 5)
             {
@@ -147,7 +144,7 @@ namespace Project_Dingleberry
                 while (!safeSpawnFound)
                 {
                     spawnX = rand.Next(0, gameForm.ClientSize.Width - 32);
-                    spawnY = rand.Next(40, gameForm.ClientSize.Height - 32); // Keep out of HUD
+                    spawnY = rand.Next(40, gameForm.ClientSize.Height - 32);
 
                     Rectangle testBox = new Rectangle(spawnX, spawnY, 32, 32);
                     safeSpawnFound = true;
@@ -167,7 +164,6 @@ namespace Project_Dingleberry
                 itemSpawnTimer = 0;
             }
 
-            // Item Collision
             for (int i = activeItems.Count - 1; i >= 0; i--)
             {
                 if (player.Hitbox.IntersectsWith(activeItems[i].Hitbox))
@@ -199,7 +195,6 @@ namespace Project_Dingleberry
                 }
             }
 
-            // Enemy Collision
             for (int i = enemies.Count - 1; i >= 0; i--)
             {
                 enemies[i].Update(player, gameForm.ClientSize.Width, gameForm.ClientSize.Height);
@@ -229,15 +224,31 @@ namespace Project_Dingleberry
             survivalTimer.Stop();
 
             string finalTime = survivalTimer.Elapsed.ToString(@"mm\:ss");
-            MessageBox.Show($"{causeOfDeath}\n\nLevel Reached: {difficultyLevel}\nSurvival Time: {finalTime}", "Game Over");
 
-            gameForm.Close();
+            // THE NEW POP-OUT REPLAY BOX
+            DialogResult result = MessageBox.Show(
+                $"{causeOfDeath}\n\nLevel Reached: {difficultyLevel}\nSurvival Time: {finalTime}",
+                "Game Over",
+                MessageBoxButtons.RetryCancel,
+                MessageBoxIcon.Information);
+
+            // Did they click Retry?
+            if (result == DialogResult.Retry)
+            {
+                gameForm.RestartGame(); // Launch a fresh game instantly!
+            }
+            else
+            {
+                gameForm.Close(); // If they hit Cancel or the X, close the game.
+            }
         }
 
         public void Draw(Graphics g)
         {
+            // If the game is over, we stop drawing the player so they disappear from the screen!
+            if (!isGameOver) player.drawEntity(g);
+
             foreach (var item in activeItems) { item.drawEntity(g); }
-            player.drawEntity(g);
             foreach (var enemy in enemies) { enemy.drawEntity(g); }
 
             // HUD
@@ -256,7 +267,7 @@ namespace Project_Dingleberry
             }
 
             // Pause Screen Overlay
-            if (isPaused)
+            if (isPaused && !isGameOver)
             {
                 using (Font pauseFont = new Font("Arial", 48, FontStyle.Bold))
                 {

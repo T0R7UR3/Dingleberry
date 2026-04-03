@@ -26,6 +26,12 @@ namespace Project_Dingleberry
             gameTimer.Start();
         }
 
+        // NEW: A clean method to wipe the slate and start over!
+        public void RestartGame()
+        {
+            controller = new GameController(this);
+        }
+
         protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
@@ -35,7 +41,6 @@ namespace Project_Dingleberry
             if (e.KeyCode == Keys.A || e.KeyCode == Keys.Left) p.IsMovingLeft = true;
             if (e.KeyCode == Keys.D || e.KeyCode == Keys.Right) p.IsMovingRight = true;
 
-            // Pause Toggle
             if (e.KeyCode == Keys.P || e.KeyCode == Keys.Escape) controller.TogglePause();
         }
 
