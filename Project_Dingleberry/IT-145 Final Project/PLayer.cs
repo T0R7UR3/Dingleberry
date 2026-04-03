@@ -14,7 +14,9 @@ namespace Project_Dingleberry
 
         public int Lives => lives;
 
-        // NEW: Passed Color.Blue to the base Entity
+        // NEW: A public property to easily check if the player is currently invincible
+        public bool IsInvincible => (DateTime.Now - lastHit).TotalSeconds < 1.5;
+
         public Player(string fileName) : base(fileName, Color.Blue)
         {
             this.posX = 640;
@@ -51,7 +53,7 @@ namespace Project_Dingleberry
 
         public bool playerHit()
         {
-            if ((DateTime.Now - lastHit).TotalSeconds >= 1.5)
+            if (!IsInvincible)
             {
                 lastHit = DateTime.Now;
                 lives -= 1;
@@ -60,10 +62,26 @@ namespace Project_Dingleberry
             return false;
         }
 
-        // NEW: Allows the Life item to heal the player
         public void AddLife()
         {
             lives += 1;
+        }
+
+        // NEW: Override the draw method to add the flicker effect!
+        public override void drawEntity(Graphics g)
+        {
+            if (IsInvincible)
+            {
+                // Divide the current millisecond by 100 to get a pulsing 0-1-0-1 pattern.
+                // If it's an even number, we skip drawing the player this frame!
+                if ((DateTime.Now.Millisecond / 100) % 2 == 0)
+                {
+                    return;
+                }
+            }
+
+            // If we aren't invincible (or if it's the "visible" part of the blink), draw normally
+            base.drawEntity(g);
         }
     }
 }
