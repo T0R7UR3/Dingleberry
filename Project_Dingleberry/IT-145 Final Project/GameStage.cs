@@ -46,6 +46,11 @@ namespace Project_Dingleberry
             if (e.KeyCode == Keys.D || e.KeyCode == Keys.Right) p.IsMovingRight = false;
         }
 
+        private void InitializeComponent()
+        {
+
+        }
+
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
