@@ -52,8 +52,29 @@ namespace Project_Dingleberry
 
             Enemy newEnemy = new Enemy("Enemy.png", randomType);
 
-            int spawnX = rand.Next(0, gameForm.ClientSize.Width - 50);
-            int spawnY = rand.Next(0, gameForm.ClientSize.Height - 50);
+            //T10 added here -BDD
+
+            int spawnX = 0;
+            int spawnY = 0;
+            int safeDistance = 200; // Minimum pixels away from player
+            bool safeSpotFound = false;
+
+            //fairness rule: Keep picking coordinates until we are outside the player's "bubble"
+            while (!safeSpotFound)
+            {
+
+                spawnX = rand.Next(0, gameForm.ClientSize.Width - 50);
+                spawnY = rand.Next(0, gameForm.ClientSize.Height - 50);
+
+                double diffX = spawnX - player.GetX();
+                double diffY = spawnY - player.GetY();
+                double distance = Math.Sqrt(Math.Pow(diffX, 2) + Math.Pow(diffY, 2));
+                            
+                if (distance >= safeDistance)
+                {
+                    safeSpotFound = true;
+                }
+            }
 
             newEnemy.setPos(spawnX, spawnY);
 
