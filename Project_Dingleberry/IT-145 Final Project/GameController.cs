@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics; // NEW: Required for the Stopwatch!
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -11,13 +12,15 @@ namespace Project_Dingleberry
         private Player player;
         private List<Enemy> enemies;
 
-        private int maxEnemies = 10;
+        private int maxEnemies = 20;
         private int spawnTimer = 0;
         private int spawnInterval = 100;
         private Random rand = new Random();
 
-        // The emergency stop switch to prevent ghost timer pop-ups
         private bool isGameOver = false;
+
+        // NEW: The survival timer to track the player's score
+        private Stopwatch survivalTimer;
 
         public GameController(Form form)
         {
@@ -25,24 +28,27 @@ namespace Project_Dingleberry
             enemies = new List<Enemy>();
 
             player = new Player("Player.png");
-            player.setPos(350, 450);
+            player.setPos(640, 360);
+
+            // Start the clock as soon as the game begins!
+            survivalTimer = new Stopwatch();
+            survivalTimer.Start();
 
             Enemy chaser = new Enemy("Enemy.png", EnemyType.Chaser);
             chaser.setPos(100, 100);
             enemies.Add(chaser);
 
             Enemy bouncer = new Enemy("Enemy.png", EnemyType.Bouncer);
-            bouncer.setPos(600, 100);
+            bouncer.setPos(1000, 100);
             enemies.Add(bouncer);
 
             Enemy drifter = new Enemy("Enemy.png", EnemyType.Drifter);
-            drifter.setPos(350, 200);
+            drifter.setPos(640, 100);
             enemies.Add(drifter);
         }
 
         private void SpawnRandomEnemy()
         {
-            // Check if a Chaser already exists in the list
             bool hasChaser = false;
             foreach (var enemy in enemies)
             {
@@ -53,22 +59,15 @@ namespace Project_Dingleberry
                 }
             }
 
-            // Build a list of allowed types for this specific spawn
             List<EnemyType> allowedTypes = new List<EnemyType> { EnemyType.Bouncer, EnemyType.Drifter };
+            if (!hasChaser) allowedTypes.Add(EnemyType.Chaser);
 
-            // Only add Chaser to the pool if one doesn't exist yet
-            if (!hasChaser)
-            {
-                allowedTypes.Add(EnemyType.Chaser);
-            }
-
-            // Pick a random type from our safe list
             EnemyType randomType = allowedTypes[rand.Next(allowedTypes.Count)];
             Enemy newEnemy = new Enemy("Enemy.png", randomType);
 
             int spawnX = 0;
             int spawnY = 0;
-            int safeDistance = 200;
+            int safeDistance = 300;
             bool safeSpotFound = false;
 
             while (!safeSpotFound)
@@ -94,7 +93,6 @@ namespace Project_Dingleberry
 
         public void Update()
         {
-            // If the game is over, ignore all leftover timer ticks
             if (isGameOver) return;
 
             player.ProcessMovement();
@@ -119,15 +117,19 @@ namespace Project_Dingleberry
                     {
                         enemies.RemoveAt(i);
 
-                        // Check for Game Over
                         if (player.Lives <= 0)
                         {
-                            // Flip the switch so no more updates happen
                             isGameOver = true;
 
-                            MessageBox.Show("You ran out of lives!", "Game Over");
+                            // NEW: Stop the clock!
+                            survivalTimer.Stop();
 
-                            // Close this specific game window to return to Main Menu
+                            // Format the final time to look like "01:23"
+                            string finalTime = survivalTimer.Elapsed.ToString(@"mm\:ss");
+
+                            // Show the time in the Game Over box
+                            MessageBox.Show($"You ran out of lives!\n\nSurvival Time: {finalTime}", "Game Over");
+
                             gameForm.Close();
                             return;
                         }
@@ -140,10 +142,29 @@ namespace Project_Dingleberry
 
         public void Draw(Graphics g)
         {
+            // 1. Draw the player
             player.drawEntity(g);
+
+            // 2. Draw the enemy swarm
             foreach (var enemy in enemies)
             {
                 enemy.drawEntity(g);
+            }
+
+            // 3. Draw the HUD
+            using (Font hudFont = new Font("Arial", 16, FontStyle.Bold))
+            {
+                // Draw Lives in the top-left
+                string livesText = $"Lives: {player.Lives}";
+                g.DrawString(livesText, hudFont, Brushes.Black, new PointF(10, 10));
+
+                // NEW: Draw Timer in the top-right
+                // The formatting @"mm\:ss" turns raw milliseconds into clean Minutes:Seconds
+                string timeText = $"Time: {survivalTimer.Elapsed.ToString(@"mm\:ss")}";
+
+                // Measure how wide the text is so we can perfectly right-align it
+                SizeF textSize = g.MeasureString(timeText, hudFont);
+                g.DrawString(timeText, hudFont, Brushes.Black, new PointF(gameForm.ClientSize.Width - textSize.Width - 10, 10));
             }
         }
     }

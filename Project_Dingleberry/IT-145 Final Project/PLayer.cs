@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Drawing;
-using System.Windows.Forms;
 
 namespace Project_Dingleberry
 {
@@ -13,13 +12,12 @@ namespace Project_Dingleberry
         private int lives = 3;
         private DateTime lastHit = DateTime.MinValue;
 
-        // Public property to let GameController check how many lives we have
         public int Lives => lives;
 
         public Player(string fileName) : base(fileName)
         {
-            this.posX = 350;
-            this.posY = 450;
+            this.posX = 640;
+            this.posY = 360;
         }
 
         public void ProcessMovement()
@@ -52,7 +50,8 @@ namespace Project_Dingleberry
 
         public bool playerHit()
         {
-            if ((DateTime.Now - lastHit).TotalSeconds >= 1)
+            // Set to 1.5 seconds for a fast-paced, balanced arcade feel
+            if ((DateTime.Now - lastHit).TotalSeconds >= 1.5)
             {
                 lastHit = DateTime.Now;
                 lives -= 1;

@@ -11,7 +11,8 @@ namespace Project_Dingleberry
 
         public GameStage()
         {
-            this.Size = new Size(800, 600);
+            // Upgraded to a  720p widescreen resolution!
+            this.Size = new Size(1280, 720);
             this.Text = "Project Dingleberry - Battle Zone";
             this.BackColor = Color.White;
             this.DoubleBuffered = true;
@@ -21,7 +22,7 @@ namespace Project_Dingleberry
 
             controller = new GameController(this);
 
-            gameTimer.Interval = 16; // 60 FPS
+            gameTimer.Interval = 16; // ~60 FPS
             gameTimer.Tick += (s, e) => controller.Update();
             gameTimer.Start();
         }
@@ -44,11 +45,6 @@ namespace Project_Dingleberry
             if (e.KeyCode == Keys.S || e.KeyCode == Keys.Down) p.IsMovingDown = false;
             if (e.KeyCode == Keys.A || e.KeyCode == Keys.Left) p.IsMovingLeft = false;
             if (e.KeyCode == Keys.D || e.KeyCode == Keys.Right) p.IsMovingRight = false;
-        }
-
-        private void InitializeComponent()
-        {
-
         }
 
         protected override void OnPaint(PaintEventArgs e)
