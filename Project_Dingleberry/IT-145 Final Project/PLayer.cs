@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 
 namespace Project_Dingleberry
@@ -11,6 +12,12 @@ namespace Project_Dingleberry
 
         // Determines how many pixels the player moves per frame (16ms)
         private int speed = 8;
+
+        // The number of times the player can be hit before dying
+        private int lives = 3;
+
+        //
+        private DateTime lastHit = DateTime.Now;
 
         public Player(string fileName) : base(fileName)
         {
@@ -54,6 +61,23 @@ namespace Project_Dingleberry
             // Prevent moving off the right or bottom edges (accounting for approx. sprite size)
             if (posX > width - 40) posX = width - 40;
             if (posY > height - 60) posY = height - 60;
+        }
+
+        public void playerHit()
+        {
+            if ((DateTime.Now - lastHit).TotalSeconds >= 2)
+            {
+                lastHit = DateTime.Now;
+                lives -= 1;
+
+                Debug.WriteLine($"Player was hit. {lives} lives remaining.");
+
+                if (lives <= 0)
+                {
+                    // Game over.
+                    Debug.WriteLine("Player died.");
+                }
+            }
         }
     }
 }
