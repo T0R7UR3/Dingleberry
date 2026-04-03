@@ -10,9 +10,8 @@ namespace Project_Dingleberry
         protected int posX;
         protected int posY;
         protected Image? entityImage;
-        protected Color fallbackColor; // NEW: Stores the placeholder color
+        protected Color fallbackColor;
 
-        // NEW: Constructor now asks for a color
         public Entity(string fileName, Color fallback)
         {
             fallbackColor = fallback;
@@ -26,7 +25,8 @@ namespace Project_Dingleberry
             if (entityImage != null) g.DrawImage(entityImage, posX, posY);
         }
 
-        public Rectangle Hitbox => new Rectangle(posX, posY, entityImage?.Width ?? 30, entityImage?.Height ?? 30);
+        // Standardized 32x32 hitboxes for perfect collision mapping
+        public Rectangle Hitbox => new Rectangle(posX, posY, entityImage?.Width ?? 32, entityImage?.Height ?? 32);
 
         public void setPos(int x, int y)
         {
@@ -46,8 +46,7 @@ namespace Project_Dingleberry
             }
             catch
             {
-                // Draws the custom color instead of always being red!
-                Bitmap tempImg = new Bitmap(30, 30);
+                Bitmap tempImg = new Bitmap(32, 32);
                 using (Graphics g = Graphics.FromImage(tempImg))
                 {
                     g.Clear(fallbackColor);

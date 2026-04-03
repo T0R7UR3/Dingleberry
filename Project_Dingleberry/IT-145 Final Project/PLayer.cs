@@ -13,8 +13,6 @@ namespace Project_Dingleberry
         private DateTime lastHit = DateTime.MinValue;
 
         public int Lives => lives;
-
-        // NEW: A public property to easily check if the player is currently invincible
         public bool IsInvincible => (DateTime.Now - lastHit).TotalSeconds < 1.5;
 
         public Player(string fileName) : base(fileName, Color.Blue)
@@ -46,9 +44,9 @@ namespace Project_Dingleberry
         public void clampToScreen(int width, int height)
         {
             if (posX < 0) posX = 0;
-            if (posY < 0) posY = 0;
-            if (posX > width - 40) posX = width - 40;
-            if (posY > height - 60) posY = height - 60;
+            if (posY < 40) posY = 40; // The Invisible HUD Wall
+            if (posX > width - 32) posX = width - 32;
+            if (posY > height - 32) posY = height - 32;
         }
 
         public bool playerHit()
@@ -67,20 +65,13 @@ namespace Project_Dingleberry
             lives += 1;
         }
 
-        // NEW: Override the draw method to add the flicker effect!
         public override void drawEntity(Graphics g)
         {
             if (IsInvincible)
             {
-                // Divide the current millisecond by 100 to get a pulsing 0-1-0-1 pattern.
-                // If it's an even number, we skip drawing the player this frame!
-                if ((DateTime.Now.Millisecond / 100) % 2 == 0)
-                {
-                    return;
-                }
+                // Flicker effect
+                if ((DateTime.Now.Millisecond / 100) % 2 == 0) return;
             }
-
-            // If we aren't invincible (or if it's the "visible" part of the blink), draw normally
             base.drawEntity(g);
         }
     }

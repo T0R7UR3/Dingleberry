@@ -1,11 +1,12 @@
 ﻿using System;
+using System;
 using System.Drawing;
 
 namespace Project_Dingleberry
 {
     public enum ItemType
     {
-        Bomb,   // Clears the screen (Green)
+        Bomb,   // Clears half the screen (Green)
         Life,   // Gives a health point (Black)
         Mine    // Hurts the player (Yellow)
     }

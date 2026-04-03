@@ -25,7 +25,6 @@ namespace Project_Dingleberry
         private int speedY = 4;
         private Random rand = new Random();
 
-        // NEW: Passed Color.Red to the base Entity
         public Enemy(string fileName, EnemyType enemyType) : base(fileName, Color.Red)
         {
             Type = enemyType;
@@ -46,16 +45,16 @@ namespace Project_Dingleberry
                     posX += speedX;
                     posY += speedY;
 
-                    if (posX <= 0 || posX >= screenWidth - 30) speedX *= -1;
-                    if (posY <= 0 || posY >= screenHeight - 30) speedY *= -1;
+                    if (posX <= 0 || posX >= screenWidth - 32) speedX *= -1;
+                    if (posY <= 40 || posY >= screenHeight - 32) speedY *= -1;
                     break;
 
                 case EnemyType.Drifter:
                     posX += speedX;
                     posY += speedY;
 
-                    if (posX <= 0 || posX >= screenWidth - 30) speedX *= -1;
-                    if (posY <= 0 || posY >= screenHeight - 30) speedY *= -1;
+                    if (posX <= 0 || posX >= screenWidth - 32) speedX *= -1;
+                    if (posY <= 40 || posY >= screenHeight - 32) speedY *= -1;
 
                     if (rand.Next(0, 100) < 2)
                     {

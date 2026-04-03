@@ -11,7 +11,6 @@ namespace Project_Dingleberry
 
         public GameStage()
         {
-            // Upgraded to a  720p widescreen resolution!
             this.Size = new Size(1280, 720);
             this.Text = "Project Dingleberry - Battle Zone";
             this.BackColor = Color.White;
@@ -35,6 +34,9 @@ namespace Project_Dingleberry
             if (e.KeyCode == Keys.S || e.KeyCode == Keys.Down) p.IsMovingDown = true;
             if (e.KeyCode == Keys.A || e.KeyCode == Keys.Left) p.IsMovingLeft = true;
             if (e.KeyCode == Keys.D || e.KeyCode == Keys.Right) p.IsMovingRight = true;
+
+            // Pause Toggle
+            if (e.KeyCode == Keys.P || e.KeyCode == Keys.Escape) controller.TogglePause();
         }
 
         protected override void OnKeyUp(KeyEventArgs e)

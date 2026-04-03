@@ -18,19 +18,19 @@ namespace Project_Dingleberry
         private Random rand = new Random();
 
         private bool isGameOver = false;
+        private bool isPaused = false;
         private Stopwatch survivalTimer;
         private int difficultyLevel = 1;
 
-        // NEW: Item management
         private List<Item> activeItems;
         private int itemSpawnTimer = 0;
-        private int itemSpawnInterval = 300; // Spawns items roughly every 5 seconds
+        private int itemSpawnInterval = 300;
 
         public GameController(Form form)
         {
             gameForm = form;
             enemies = new List<Enemy>();
-            activeItems = new List<Item>(); // Initialize item list
+            activeItems = new List<Item>();
 
             player = new Player("Player.png");
             player.setPos(640, 360);
@@ -38,7 +38,6 @@ namespace Project_Dingleberry
             survivalTimer = new Stopwatch();
             survivalTimer.Start();
 
-            // Initial enemies
             Enemy chaser = new Enemy("Enemy.png", EnemyType.Chaser);
             chaser.setPos(100, 100);
             enemies.Add(chaser);
@@ -52,16 +51,22 @@ namespace Project_Dingleberry
             enemies.Add(drifter);
         }
 
+        public void TogglePause()
+        {
+            if (isGameOver) return;
+
+            isPaused = !isPaused;
+
+            if (isPaused) survivalTimer.Stop();
+            else survivalTimer.Start();
+        }
+
         private void SpawnRandomEnemy()
         {
             bool hasChaser = false;
             foreach (var enemy in enemies)
             {
-                if (enemy.Type == EnemyType.Chaser)
-                {
-                    hasChaser = true;
-                    break;
-                }
+                if (enemy.Type == EnemyType.Chaser) { hasChaser = true; break; }
             }
 
             List<EnemyType> allowedTypes = new List<EnemyType> { EnemyType.Bouncer, EnemyType.Drifter };
@@ -77,8 +82,8 @@ namespace Project_Dingleberry
 
             while (!safeSpotFound)
             {
-                spawnX = rand.Next(0, gameForm.ClientSize.Width - 50);
-                spawnY = rand.Next(0, gameForm.ClientSize.Height - 50);
+                spawnX = rand.Next(0, gameForm.ClientSize.Width - 32);
+                spawnY = rand.Next(40, gameForm.ClientSize.Height - 32); // Keep out of HUD
 
                 double diffX = spawnX - player.GetX();
                 double diffY = spawnY - player.GetY();
@@ -98,9 +103,9 @@ namespace Project_Dingleberry
 
         public void Update()
         {
-            if (isGameOver) return;
+            if (isGameOver || isPaused) return;
 
-            // Difficulty escalation
+            // Difficulty Escalation
             int currentSeconds = (int)survivalTimer.Elapsed.TotalSeconds;
             if (currentSeconds / 15 >= difficultyLevel)
             {
@@ -112,7 +117,7 @@ namespace Project_Dingleberry
             player.ProcessMovement();
             player.clampToScreen(gameForm.ClientSize.Width, gameForm.ClientSize.Height);
 
-            // Enemy Spawning Logic
+            // Enemy Spawning
             spawnTimer++;
             if (spawnTimer >= spawnInterval && enemies.Count < maxEnemies)
             {
@@ -120,46 +125,58 @@ namespace Project_Dingleberry
                 spawnTimer = 0;
             }
 
-            // ITEM SPAWNING LOGIC (Max 5 items on screen at once)
+            // Item Spawning (Overlap Prevention)
             itemSpawnTimer++;
             if (itemSpawnTimer >= itemSpawnInterval && activeItems.Count < 5)
             {
                 Array itemTypes = Enum.GetValues(typeof(ItemType));
                 ItemType randomItem = (ItemType)itemTypes.GetValue(rand.Next(itemTypes.Length));
 
-                // Assign the correct placeholder colors and fake image names
-                Color itemColor = Color.Green; // Default for Bomb
+                Color itemColor = Color.Green;
                 string imgName = "Bomb.png";
 
-                if (randomItem == ItemType.Life)
-                {
-                    itemColor = Color.Black;
-                    imgName = "Life.png";
-                }
-                else if (randomItem == ItemType.Mine)
-                {
-                    itemColor = Color.Yellow;
-                    imgName = "Mine.png";
-                }
+                if (randomItem == ItemType.Life) { itemColor = Color.Black; imgName = "Life.png"; }
+                else if (randomItem == ItemType.Mine) { itemColor = Color.Yellow; imgName = "Mine.png"; }
 
                 Item newItem = new Item(randomItem, imgName, itemColor);
-                newItem.setPos(rand.Next(50, gameForm.ClientSize.Width - 50), rand.Next(50, gameForm.ClientSize.Height - 50));
-                activeItems.Add(newItem);
 
+                bool safeSpawnFound = false;
+                int spawnX = 0;
+                int spawnY = 0;
+
+                while (!safeSpawnFound)
+                {
+                    spawnX = rand.Next(0, gameForm.ClientSize.Width - 32);
+                    spawnY = rand.Next(40, gameForm.ClientSize.Height - 32); // Keep out of HUD
+
+                    Rectangle testBox = new Rectangle(spawnX, spawnY, 32, 32);
+                    safeSpawnFound = true;
+
+                    foreach (var existingItem in activeItems)
+                    {
+                        if (testBox.IntersectsWith(existingItem.Hitbox))
+                        {
+                            safeSpawnFound = false;
+                            break;
+                        }
+                    }
+                }
+
+                newItem.setPos(spawnX, spawnY);
+                activeItems.Add(newItem);
                 itemSpawnTimer = 0;
             }
 
-            // ITEM COLLISION LOGIC
+            // Item Collision
             for (int i = activeItems.Count - 1; i >= 0; i--)
             {
                 if (player.Hitbox.IntersectsWith(activeItems[i].Hitbox))
                 {
                     ItemType type = activeItems[i].Type;
-                    activeItems.RemoveAt(i); // Consume the item
+                    activeItems.RemoveAt(i);
 
                     if (type == ItemType.Bomb)
                     {
-                        // Destroy half enemies
                         int enemiesToDestroy = enemies.Count / 2;
                         for (int j = 0; j < enemiesToDestroy; j++)
                         {
@@ -168,11 +185,10 @@ namespace Project_Dingleberry
                     }
                     else if (type == ItemType.Life)
                     {
-                        player.AddLife(); // Gain 1 HP
+                        player.AddLife();
                     }
                     else if (type == ItemType.Mine)
                     {
-                        // Take damage! If you are invincible, you just blow it up safely.
                         bool tookDamage = player.playerHit();
                         if (tookDamage && player.Lives <= 0)
                         {
@@ -183,7 +199,7 @@ namespace Project_Dingleberry
                 }
             }
 
-            // ENEMY COLLISION LOGIC
+            // Enemy Collision
             for (int i = enemies.Count - 1; i >= 0; i--)
             {
                 enemies[i].Update(player, gameForm.ClientSize.Width, gameForm.ClientSize.Height);
@@ -207,7 +223,6 @@ namespace Project_Dingleberry
             gameForm.Invalidate();
         }
 
-        // Helper method to keep Game Over logic clean
         private void TriggerGameOver(string causeOfDeath)
         {
             isGameOver = true;
@@ -221,19 +236,11 @@ namespace Project_Dingleberry
 
         public void Draw(Graphics g)
         {
-            // Draw items (so they render Underneath the player and enemies)
-            foreach (var item in activeItems)
-            {
-                item.drawEntity(g);
-            }
-
+            foreach (var item in activeItems) { item.drawEntity(g); }
             player.drawEntity(g);
+            foreach (var enemy in enemies) { enemy.drawEntity(g); }
 
-            foreach (var enemy in enemies)
-            {
-                enemy.drawEntity(g);
-            }
-
+            // HUD
             using (Font hudFont = new Font("Arial", 16, FontStyle.Bold))
             {
                 string livesText = $"Lives: {player.Lives}";
@@ -246,6 +253,19 @@ namespace Project_Dingleberry
                 string diffText = $"Level: {difficultyLevel}";
                 SizeF diffSize = g.MeasureString(diffText, hudFont);
                 g.DrawString(diffText, hudFont, Brushes.DarkRed, new PointF((gameForm.ClientSize.Width / 2) - (diffSize.Width / 2), 10));
+            }
+
+            // Pause Screen Overlay
+            if (isPaused)
+            {
+                using (Font pauseFont = new Font("Arial", 48, FontStyle.Bold))
+                {
+                    string pauseText = "PAUSED";
+                    SizeF pSize = g.MeasureString(pauseText, pauseFont);
+                    float pX = (gameForm.ClientSize.Width - pSize.Width) / 2;
+                    float pY = (gameForm.ClientSize.Height - pSize.Height) / 2;
+                    g.DrawString(pauseText, pauseFont, Brushes.Gray, new PointF(pX, pY));
+                }
             }
         }
     }
