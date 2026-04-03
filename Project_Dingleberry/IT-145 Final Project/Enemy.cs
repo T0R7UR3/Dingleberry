@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 
 namespace Project_Dingleberry
 {
@@ -11,14 +12,13 @@ namespace Project_Dingleberry
 
     public class Enemy : Entity
     {
-        private EnemyType type; 
+        private EnemyType type;
 
-        public EnemyType Type   
+        public EnemyType Type
         {
             get { return type; }
             set { type = value; }
         }
-      
 
         private int speed = 3;
         private int speedX = 4;
@@ -27,7 +27,6 @@ namespace Project_Dingleberry
 
         public Enemy(string fileName, EnemyType enemyType) : base(fileName)
         {
-           
             Type = enemyType;
         }
 

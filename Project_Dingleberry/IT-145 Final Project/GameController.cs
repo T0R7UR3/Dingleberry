@@ -11,14 +11,13 @@ namespace Project_Dingleberry
         private Player player;
         private List<Enemy> enemies;
 
-        // added code here - BDD
+        private int maxEnemies = 10;
+        private int spawnTimer = 0;
+        private int spawnInterval = 100;
+        private Random rand = new Random();
 
-        private int maxEnemies = 10;        //can update with more or less enemies -BDD
-        private int spawnTimer = 0;         
-        private int spawnInterval = 100;    
-        private Random rand = new Random(); 
-
-        //code added end here - BDD
+        // The emergency stop switch to prevent ghost timer pop-ups
+        private bool isGameOver = false;
 
         public GameController(Form form)
         {
@@ -28,48 +27,59 @@ namespace Project_Dingleberry
             player = new Player("Player.png");
             player.setPos(350, 450);
 
-            // Spawn a Chaser
             Enemy chaser = new Enemy("Enemy.png", EnemyType.Chaser);
             chaser.setPos(100, 100);
             enemies.Add(chaser);
 
-            // Spawn a Bouncer
             Enemy bouncer = new Enemy("Enemy.png", EnemyType.Bouncer);
             bouncer.setPos(600, 100);
             enemies.Add(bouncer);
 
-            // Spawn a Drifter
             Enemy drifter = new Enemy("Enemy.png", EnemyType.Drifter);
             drifter.setPos(350, 200);
             enemies.Add(drifter);
         }
-        //code added here -BDD
 
         private void SpawnRandomEnemy()
         {
-            Array enemyTypes = Enum.GetValues(typeof(EnemyType));
-            EnemyType randomType = (EnemyType)enemyTypes.GetValue(rand.Next(enemyTypes.Length));
+            // Check if a Chaser already exists in the list
+            bool hasChaser = false;
+            foreach (var enemy in enemies)
+            {
+                if (enemy.Type == EnemyType.Chaser)
+                {
+                    hasChaser = true;
+                    break;
+                }
+            }
 
+            // Build a list of allowed types for this specific spawn
+            List<EnemyType> allowedTypes = new List<EnemyType> { EnemyType.Bouncer, EnemyType.Drifter };
+
+            // Only add Chaser to the pool if one doesn't exist yet
+            if (!hasChaser)
+            {
+                allowedTypes.Add(EnemyType.Chaser);
+            }
+
+            // Pick a random type from our safe list
+            EnemyType randomType = allowedTypes[rand.Next(allowedTypes.Count)];
             Enemy newEnemy = new Enemy("Enemy.png", randomType);
-
-            //T10 added here -BDD
 
             int spawnX = 0;
             int spawnY = 0;
-            int safeDistance = 200; // Minimum pixels away from player
+            int safeDistance = 200;
             bool safeSpotFound = false;
 
-            //fairness rule: Keep picking coordinates until we are outside the player's "bubble"
             while (!safeSpotFound)
             {
-
                 spawnX = rand.Next(0, gameForm.ClientSize.Width - 50);
                 spawnY = rand.Next(0, gameForm.ClientSize.Height - 50);
 
                 double diffX = spawnX - player.GetX();
                 double diffY = spawnY - player.GetY();
                 double distance = Math.Sqrt(Math.Pow(diffX, 2) + Math.Pow(diffY, 2));
-                            
+
                 if (distance >= safeDistance)
                 {
                     safeSpotFound = true;
@@ -77,55 +87,55 @@ namespace Project_Dingleberry
             }
 
             newEnemy.setPos(spawnX, spawnY);
-
             enemies.Add(newEnemy);
         }
 
-        //code added end here -BDD
-
-        // Helper to let GameStage talk to the player's bools
         public Player GetPlayer() => player;
 
         public void Update()
         {
-            // Move based on held keys
-            player.ProcessMovement();
+            // If the game is over, ignore all leftover timer ticks
+            if (isGameOver) return;
 
-            // Keep on screen
+            player.ProcessMovement();
             player.clampToScreen(gameForm.ClientSize.Width, gameForm.ClientSize.Height);
 
-            //code added here -BDD
-            spawnTimer++; // Increase the timer every frame
-
-            // If enough time has passed AND we are under the max cap
+            spawnTimer++;
             if (spawnTimer >= spawnInterval && enemies.Count < maxEnemies)
             {
                 SpawnRandomEnemy();
-                spawnTimer = 0; // Reset the timer after spawning
+                spawnTimer = 0;
             }
 
             for (int i = enemies.Count - 1; i >= 0; i--)
             {
                 enemies[i].Update(player, gameForm.ClientSize.Width, gameForm.ClientSize.Height);
 
-                // Collision check (Player touches enemy)
                 if (player.Hitbox.IntersectsWith(enemies[i].Hitbox))
                 {
-                    enemies.RemoveAt(i);
+                    bool tookDamage = player.playerHit();
+
+                    if (tookDamage)
+                    {
+                        enemies.RemoveAt(i);
+
+                        // Check for Game Over
+                        if (player.Lives <= 0)
+                        {
+                            // Flip the switch so no more updates happen
+                            isGameOver = true;
+
+                            MessageBox.Show("You ran out of lives!", "Game Over");
+
+                            // Close this specific game window to return to Main Menu
+                            gameForm.Close();
+                            return;
+                        }
+                    }
                 }
             }
-            //code added end here -BDD
 
-
-            // NEW: Update all enemies
-            foreach (var enemy in enemies)
-            {
-                enemy.Update(player, gameForm.ClientSize.Width, gameForm.ClientSize.Height);
-            }
-
-            // Redraw
             gameForm.Invalidate();
-
         }
 
         public void Draw(Graphics g)
