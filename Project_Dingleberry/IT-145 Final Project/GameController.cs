@@ -8,13 +8,23 @@ namespace Project_Dingleberry
 {
     internal class GameController
     {
+        private const int EntitySize = 32;
+        private const int HUDWall = 40;
+        private const int SafeSpawnDistance = 300;
+        private const int MaxSpawnAttempts = 50;
+        private const int EscalateEveryXSeconds = 15;
+        private const int MaxItemsOnScreen = 5;
+
         private GameStage gameForm;
         private Player player;
         private List<Enemy> enemies;
+        private List<Item> activeItems;
 
         private int maxEnemies = 20;
         private int spawnTimer = 0;
         private int spawnInterval = 100;
+
+        // The Master Random Generator
         private Random rand = new Random();
 
         private bool isGameOver = false;
@@ -22,7 +32,6 @@ namespace Project_Dingleberry
         private Stopwatch survivalTimer;
         private int difficultyLevel = 1;
 
-        private List<Item> activeItems;
         private int itemSpawnTimer = 0;
         private int itemSpawnInterval = 300;
 
@@ -33,20 +42,21 @@ namespace Project_Dingleberry
             activeItems = new List<Item>();
 
             player = new Player("Player.png");
-            player.SetPos(640, 360);
+            player.SetPos(640, 360); // Set once, right here!
 
             survivalTimer = new Stopwatch();
             survivalTimer.Start();
 
-            Enemy chaser = new Enemy("Enemy.png", EnemyType.Chaser);
+            // FIX: Passing the master 'rand' to the enemies
+            Enemy chaser = new Enemy("Enemy.png", EnemyType.Chaser, rand);
             chaser.SetPos(100, 100);
             enemies.Add(chaser);
 
-            Enemy bouncer = new Enemy("Enemy.png", EnemyType.Bouncer);
+            Enemy bouncer = new Enemy("Enemy.png", EnemyType.Bouncer, rand);
             bouncer.SetPos(1000, 100);
             enemies.Add(bouncer);
 
-            Enemy drifter = new Enemy("Enemy.png", EnemyType.Drifter);
+            Enemy drifter = new Enemy("Enemy.png", EnemyType.Drifter, rand);
             drifter.SetPos(640, 100);
             enemies.Add(drifter);
         }
@@ -73,7 +83,7 @@ namespace Project_Dingleberry
             if (!hasChaser) allowedTypes.Add(EnemyType.Chaser);
 
             EnemyType randomType = allowedTypes[rand.Next(allowedTypes.Count)];
-            Enemy newEnemy = new Enemy("Enemy.png", randomType);
+            Enemy newEnemy = new Enemy("Enemy.png", randomType, rand);
 
             int spawnX = 0;
             int spawnY = 0;

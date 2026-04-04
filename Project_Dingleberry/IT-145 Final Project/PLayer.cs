@@ -1,24 +1,28 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Drawing;
 
 namespace Project_Dingleberry
 {
     public class Player : Entity
     {
+        public const int MaxLives = 5;
+        public const int HUDWall = 40;
+        public const int EntitySize = 32;
+        public const int PlayerSpeed = 8;
+        public const double InvincibilitySeconds = 1.5;
+        public const double DiagonalMultiplier = 0.707;
+
         public bool IsMovingUp, IsMovingDown, IsMovingLeft, IsMovingRight;
 
-        private int speed = 8;
         private int lives = 3;
         private DateTime lastHit = DateTime.MinValue;
 
         public int Lives => lives;
-        public bool IsInvincible => (DateTime.Now - lastHit).TotalSeconds < 1.5;
+        public bool IsInvincible => (DateTime.Now - lastHit).TotalSeconds < InvincibilitySeconds;
 
+        // Constructor no longer forces a position. GameController handles it via SetPos.
         public Player(string fileName) : base(fileName, Color.Blue)
         {
-            this.posX = 640;
-            this.posY = 360;
         }
 
         public void ProcessMovement()
@@ -33,20 +37,20 @@ namespace Project_Dingleberry
 
             if (moveX != 0 && moveY != 0)
             {
-                moveX *= 0.707;
-                moveY *= 0.707;
+                moveX *= DiagonalMultiplier;
+                moveY *= DiagonalMultiplier;
             }
 
-            posX += (int)(moveX * speed);
-            posY += (int)(moveY * speed);
+            posX += (int)(moveX * PlayerSpeed);
+            posY += (int)(moveY * PlayerSpeed);
         }
 
         public void ClampToScreen(int width, int height)
         {
             if (posX < 0) posX = 0;
-            if (posY < 40) posY = 40;
-            if (posX > width - 32) posX = width - 32;
-            if (posY > height - 32) posY = height - 32;
+            if (posY < HUDWall) posY = HUDWall;
+            if (posX > width - EntitySize) posX = width - EntitySize;
+            if (posY > height - EntitySize) posY = height - EntitySize;
         }
 
         public bool PlayerHit()
@@ -62,7 +66,11 @@ namespace Project_Dingleberry
 
         public void AddLife()
         {
-            lives += 1;
+            // FIX: Capped lives so the game doesn't become too easy!
+            if (lives < MaxLives)
+            {
+                lives += 1;
+            }
         }
 
         public override void DrawEntity(Graphics g)
