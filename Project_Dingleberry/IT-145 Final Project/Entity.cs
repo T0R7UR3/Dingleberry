@@ -15,20 +15,19 @@ namespace Project_Dingleberry
         public Entity(string fileName, Color fallback)
         {
             fallbackColor = fallback;
-            setImage(fileName);
+            SetImage(fileName);
             posX = 100;
             posY = 100;
         }
 
-        public virtual void drawEntity(Graphics g)
+        public virtual void DrawEntity(Graphics g)
         {
             if (entityImage != null) g.DrawImage(entityImage, posX, posY);
         }
 
-        // Standardized 32x32 hitboxes for perfect collision mapping
         public Rectangle Hitbox => new Rectangle(posX, posY, entityImage?.Width ?? 32, entityImage?.Height ?? 32);
 
-        public void setPos(int x, int y)
+        public void SetPos(int x, int y)
         {
             posX = x;
             posY = y;
@@ -37,7 +36,7 @@ namespace Project_Dingleberry
         public int GetX() => posX;
         public int GetY() => posY;
 
-        public void setImage(string fileName)
+        public void SetImage(string fileName)
         {
             try
             {

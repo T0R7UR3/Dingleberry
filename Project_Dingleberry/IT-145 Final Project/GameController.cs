@@ -33,21 +33,21 @@ namespace Project_Dingleberry
             activeItems = new List<Item>();
 
             player = new Player("Player.png");
-            player.setPos(640, 360);
+            player.SetPos(640, 360);
 
             survivalTimer = new Stopwatch();
             survivalTimer.Start();
 
             Enemy chaser = new Enemy("Enemy.png", EnemyType.Chaser);
-            chaser.setPos(100, 100);
+            chaser.SetPos(100, 100);
             enemies.Add(chaser);
 
             Enemy bouncer = new Enemy("Enemy.png", EnemyType.Bouncer);
-            bouncer.setPos(1000, 100);
+            bouncer.SetPos(1000, 100);
             enemies.Add(bouncer);
 
             Enemy drifter = new Enemy("Enemy.png", EnemyType.Drifter);
-            drifter.setPos(640, 100);
+            drifter.SetPos(640, 100);
             enemies.Add(drifter);
         }
 
@@ -79,8 +79,10 @@ namespace Project_Dingleberry
             int spawnY = 0;
             int safeDistance = 300;
             bool safeSpotFound = false;
+            int attempts = 0;
 
-            while (!safeSpotFound)
+            // FIX: Capped at 50 attempts to prevent infinite loop crashes
+            while (!safeSpotFound && attempts < 50)
             {
                 spawnX = rand.Next(0, gameForm.ClientSize.Width - 32);
                 spawnY = rand.Next(40, gameForm.ClientSize.Height - 32);
@@ -93,10 +95,15 @@ namespace Project_Dingleberry
                 {
                     safeSpotFound = true;
                 }
+                attempts++;
             }
 
-            newEnemy.setPos(spawnX, spawnY);
-            enemies.Add(newEnemy);
+            // If we couldn't find a safe spot in 50 tries, skip spawning this time
+            if (safeSpotFound)
+            {
+                newEnemy.SetPos(spawnX, spawnY);
+                enemies.Add(newEnemy);
+            }
         }
 
         public Player GetPlayer() => player;
@@ -114,7 +121,7 @@ namespace Project_Dingleberry
             }
 
             player.ProcessMovement();
-            player.clampToScreen(gameForm.ClientSize.Width, gameForm.ClientSize.Height);
+            player.ClampToScreen(gameForm.ClientSize.Width, gameForm.ClientSize.Height);
 
             spawnTimer++;
             if (spawnTimer >= spawnInterval && enemies.Count < maxEnemies)
@@ -126,8 +133,8 @@ namespace Project_Dingleberry
             itemSpawnTimer++;
             if (itemSpawnTimer >= itemSpawnInterval && activeItems.Count < 5)
             {
-                Array itemTypes = Enum.GetValues(typeof(ItemType));
-                ItemType randomItem = (ItemType)itemTypes.GetValue(rand.Next(itemTypes.Length));
+                ItemType[] itemTypes = (ItemType[])Enum.GetValues(typeof(ItemType));
+                ItemType randomItem = itemTypes[rand.Next(itemTypes.Length)];
 
                 Color itemColor = Color.Green;
                 string imgName = "Bomb.png";
@@ -140,8 +147,10 @@ namespace Project_Dingleberry
                 bool safeSpawnFound = false;
                 int spawnX = 0;
                 int spawnY = 0;
+                int attempts = 0;
 
-                while (!safeSpawnFound)
+                // FIX: Capped attempts AND checking against everything on screen
+                while (!safeSpawnFound && attempts < 50)
                 {
                     spawnX = rand.Next(0, gameForm.ClientSize.Width - 32);
                     spawnY = rand.Next(40, gameForm.ClientSize.Height - 32);
@@ -149,18 +158,32 @@ namespace Project_Dingleberry
                     Rectangle testBox = new Rectangle(spawnX, spawnY, 32, 32);
                     safeSpawnFound = true;
 
+                    // Avoid other items
                     foreach (var existingItem in activeItems)
                     {
-                        if (testBox.IntersectsWith(existingItem.Hitbox))
+                        if (testBox.IntersectsWith(existingItem.Hitbox)) { safeSpawnFound = false; break; }
+                    }
+
+                    // Avoid Player
+                    if (safeSpawnFound && testBox.IntersectsWith(player.Hitbox)) safeSpawnFound = false;
+
+                    // Avoid Enemies
+                    if (safeSpawnFound)
+                    {
+                        foreach (var enemy in enemies)
                         {
-                            safeSpawnFound = false;
-                            break;
+                            if (testBox.IntersectsWith(enemy.Hitbox)) { safeSpawnFound = false; break; }
                         }
                     }
+
+                    attempts++;
                 }
 
-                newItem.setPos(spawnX, spawnY);
-                activeItems.Add(newItem);
+                if (safeSpawnFound)
+                {
+                    newItem.SetPos(spawnX, spawnY);
+                    activeItems.Add(newItem);
+                }
                 itemSpawnTimer = 0;
             }
 
@@ -185,7 +208,7 @@ namespace Project_Dingleberry
                     }
                     else if (type == ItemType.Mine)
                     {
-                        bool tookDamage = player.playerHit();
+                        bool tookDamage = player.PlayerHit();
                         if (tookDamage && player.Lives <= 0)
                         {
                             TriggerGameOver("You stepped on a mine!");
@@ -201,7 +224,7 @@ namespace Project_Dingleberry
 
                 if (player.Hitbox.IntersectsWith(enemies[i].Hitbox))
                 {
-                    bool tookDamage = player.playerHit();
+                    bool tookDamage = player.PlayerHit();
 
                     if (tookDamage)
                     {
@@ -225,33 +248,29 @@ namespace Project_Dingleberry
 
             string finalTime = survivalTimer.Elapsed.ToString(@"mm\:ss");
 
-            // THE NEW POP-OUT REPLAY BOX
             DialogResult result = MessageBox.Show(
                 $"{causeOfDeath}\n\nLevel Reached: {difficultyLevel}\nSurvival Time: {finalTime}",
                 "Game Over",
                 MessageBoxButtons.RetryCancel,
                 MessageBoxIcon.Information);
 
-            // Did they click Retry?
             if (result == DialogResult.Retry)
             {
-                gameForm.RestartGame(); // Launch a fresh game instantly!
+                gameForm.RestartGame();
             }
             else
             {
-                gameForm.Close(); // If they hit Cancel or the X, close the game.
+                gameForm.Close();
             }
         }
 
         public void Draw(Graphics g)
         {
-            // If the game is over, we stop drawing the player so they disappear from the screen!
-            if (!isGameOver) player.drawEntity(g);
+            if (!isGameOver) player.DrawEntity(g);
 
-            foreach (var item in activeItems) { item.drawEntity(g); }
-            foreach (var enemy in enemies) { enemy.drawEntity(g); }
+            foreach (var item in activeItems) { item.DrawEntity(g); }
+            foreach (var enemy in enemies) { enemy.DrawEntity(g); }
 
-            // HUD
             using (Font hudFont = new Font("Arial", 16, FontStyle.Bold))
             {
                 string livesText = $"Lives: {player.Lives}";
@@ -266,7 +285,6 @@ namespace Project_Dingleberry
                 g.DrawString(diffText, hudFont, Brushes.DarkRed, new PointF((gameForm.ClientSize.Width / 2) - (diffSize.Width / 2), 10));
             }
 
-            // Pause Screen Overlay
             if (isPaused && !isGameOver)
             {
                 using (Font pauseFont = new Font("Arial", 48, FontStyle.Bold))

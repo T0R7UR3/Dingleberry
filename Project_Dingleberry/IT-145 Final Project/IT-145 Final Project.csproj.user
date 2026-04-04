@@ -7,8 +7,5 @@
     <Compile Update="John_Stick.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="playButtonForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
   </ItemGroup>
 </Project>

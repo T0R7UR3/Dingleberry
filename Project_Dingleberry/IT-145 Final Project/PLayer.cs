@@ -41,15 +41,15 @@ namespace Project_Dingleberry
             posY += (int)(moveY * speed);
         }
 
-        public void clampToScreen(int width, int height)
+        public void ClampToScreen(int width, int height)
         {
             if (posX < 0) posX = 0;
-            if (posY < 40) posY = 40; // The Invisible HUD Wall
+            if (posY < 40) posY = 40;
             if (posX > width - 32) posX = width - 32;
             if (posY > height - 32) posY = height - 32;
         }
 
-        public bool playerHit()
+        public bool PlayerHit()
         {
             if (!IsInvincible)
             {
@@ -65,14 +65,13 @@ namespace Project_Dingleberry
             lives += 1;
         }
 
-        public override void drawEntity(Graphics g)
+        public override void DrawEntity(Graphics g)
         {
             if (IsInvincible)
             {
-                // Flicker effect
                 if ((DateTime.Now.Millisecond / 100) % 2 == 0) return;
             }
-            base.drawEntity(g);
+            base.DrawEntity(g);
         }
     }
 }
