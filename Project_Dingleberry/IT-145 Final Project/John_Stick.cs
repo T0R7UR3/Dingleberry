@@ -52,10 +52,6 @@ namespace Project_Dingleberry
             splashTimer.Start();
         }
 
-        // ---------------------------------------------------------
-        // MENU BUTTON CLICKS (Now matching your designer file!)
-        // ---------------------------------------------------------
-
         private void play_Click(object sender, EventArgs e)
         {
             GameStage gameWindow = new GameStage();
