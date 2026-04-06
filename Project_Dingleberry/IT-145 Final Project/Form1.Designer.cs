@@ -2,15 +2,8 @@
 {
     public partial class John_Stick
     {
-        /// <summary>
-        ///  Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        ///  Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -22,84 +15,81 @@
 
         #region Windows Form Designer generated code
 
-        /// <summary>
-        ///  Required method for Designer support - do not modify
-        ///  the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
-            title = new TextBox();
-            play = new Button();
-            high_scores = new Button();
-            exit = new Button();
+            title = new System.Windows.Forms.TextBox();
+            play = new System.Windows.Forms.Button();
+            high_scores = new System.Windows.Forms.Button();
+            exit = new System.Windows.Forms.Button();
             SuspendLayout();
             // 
             // title
             // 
-            title.BackColor = SystemColors.ControlText;
-            title.BorderStyle = BorderStyle.None;
-            title.Font = new Font("Bahnschrift Condensed", 72F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            title.ForeColor = Color.Red;
-            title.Location = new Point(487, 49);
+            title.BackColor = System.Drawing.SystemColors.ControlText;
+            title.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            title.Font = new System.Drawing.Font("Bahnschrift Condensed", 72F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            title.ForeColor = System.Drawing.Color.Red;
+            title.Location = new System.Drawing.Point(487, 49);
             title.Name = "title";
-            title.Size = new Size(675, 231);
+            title.Size = new System.Drawing.Size(675, 231);
             title.TabIndex = 0;
             title.Text = "TITLE";
-            title.TextAlign = HorizontalAlignment.Center;
+            title.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // play
             // 
-            play.BackColor = Color.Red;
-            play.Location = new Point(123, 543);
+            play.BackColor = System.Drawing.Color.Red;
+            play.Location = new System.Drawing.Point(123, 543);
             play.Name = "play";
-            play.Size = new Size(266, 129);
+            play.Size = new System.Drawing.Size(266, 129);
             play.TabIndex = 1;
             play.Text = "Start Game";
             play.UseVisualStyleBackColor = false;
-            play.Click += play_Click;
+            play.Click += new System.EventHandler(this.play_Click);
             // 
             // high_scores
             // 
-            high_scores.BackColor = Color.Red;
-            high_scores.Location = new Point(697, 543);
+            high_scores.BackColor = System.Drawing.Color.Red;
+            high_scores.Location = new System.Drawing.Point(697, 543);
             high_scores.Name = "high_scores";
-            high_scores.Size = new Size(258, 129);
+            high_scores.Size = new System.Drawing.Size(258, 129);
             high_scores.TabIndex = 2;
             high_scores.Text = "High Scores";
             high_scores.UseVisualStyleBackColor = false;
+            high_scores.Click += new System.EventHandler(this.high_scores_Click);
             // 
             // exit
             // 
-            exit.BackColor = Color.Red;
-            exit.Location = new Point(1235, 543);
+            exit.BackColor = System.Drawing.Color.Red;
+            exit.Location = new System.Drawing.Point(1235, 543);
             exit.Name = "exit";
-            exit.Size = new Size(223, 129);
+            exit.Size = new System.Drawing.Size(223, 129);
             exit.TabIndex = 3;
             exit.Text = "Exit";
             exit.UseVisualStyleBackColor = false;
-            exit.Click += exit_Click;
+            exit.Click += new System.EventHandler(this.exit_Click);
             // 
             // John_Stick
             // 
-            AutoScaleDimensions = new SizeF(13F, 32F);
-            AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.Black;
-            ClientSize = new Size(1590, 973);
+            AutoScaleDimensions = new System.Drawing.SizeF(13F, 32F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            BackColor = System.Drawing.Color.Black;
+            ClientSize = new System.Drawing.Size(1590, 973);
             Controls.Add(exit);
             Controls.Add(high_scores);
             Controls.Add(play);
             Controls.Add(title);
             Name = "John_Stick";
-            Text = ": THE GAME";
+            Text = "Project Dingleberry: Battle Zone";
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
 
-        private TextBox title;
-        private Button play;
-        private Button high_scores;
-        private Button exit;
+        private System.Windows.Forms.TextBox title;
+        private System.Windows.Forms.Button play;
+        private System.Windows.Forms.Button high_scores;
+        private System.Windows.Forms.Button exit;
     }
 }

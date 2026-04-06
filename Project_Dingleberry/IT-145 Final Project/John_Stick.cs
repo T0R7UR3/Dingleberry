@@ -6,37 +6,78 @@ namespace Project_Dingleberry
 {
     public partial class John_Stick : Form
     {
-        // No timer or controller here anymore! 
-        // They live in GameStage.cs now.
-
         public John_Stick()
         {
             InitializeComponent();
-            this.Text = "Project Dingleberry - Main Menu";
+            SetupSplashScreen();
         }
+
+        private void SetupSplashScreen()
+        {
+            foreach (Control control in this.Controls)
+            {
+                control.Visible = false;
+            }
+
+            Panel splashPanel = new Panel();
+            splashPanel.Dock = DockStyle.Fill;
+            splashPanel.BackColor = Color.Black;
+
+            Label studioLabel = new Label();
+            studioLabel.Text = "DINGLEBERRY ENTERTAINMENT\n\npresents";
+            studioLabel.ForeColor = Color.White;
+            studioLabel.Font = new Font("Arial", 36, FontStyle.Bold);
+            studioLabel.AutoSize = false;
+            studioLabel.TextAlign = ContentAlignment.MiddleCenter;
+            studioLabel.Dock = DockStyle.Fill;
+
+            splashPanel.Controls.Add(studioLabel);
+            this.Controls.Add(splashPanel);
+            splashPanel.BringToFront();
+
+            System.Windows.Forms.Timer splashTimer = new System.Windows.Forms.Timer();
+            splashTimer.Interval = 3000;
+            splashTimer.Tick += (s, e) =>
+            {
+                splashTimer.Stop();
+                this.Controls.Remove(splashPanel);
+                splashPanel.Dispose();
+
+                foreach (Control control in this.Controls)
+                {
+                    control.Visible = true;
+                }
+            };
+
+            splashTimer.Start();
+        }
+
+        // ---------------------------------------------------------
+        // MENU BUTTON CLICKS (Now matching your designer file!)
+        // ---------------------------------------------------------
 
         private void play_Click(object sender, EventArgs e)
         {
-            // 1. Create the new game window
-            GameStage stage = new GameStage();
-
-            // 2. Setup the "Back to Menu" logic
-            stage.FormClosed += (s, args) => this.Show();
-
-            // 3. Show the game and hide the menu
-            stage.Show();
-            stage.Activate();
-            stage.Focus();
+            GameStage gameWindow = new GameStage();
 
             this.Hide();
+            gameWindow.Show();
+
+            gameWindow.FormClosed += (s, args) => this.Close();
+        }
+
+        private void high_scores_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(
+                "High Scores coming in Version 1.1!\n\nKeep practicing!",
+                "Dingleberry Entertainment",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
         }
 
         private void exit_Click(object sender, EventArgs e)
         {
-            Application.Exit();
+            this.Close(); // Fully closes the application!
         }
-
-        // Designer needs these, we keep them empty
-        private void high_scores_Click(object sender, EventArgs e) { }
     }
 }
