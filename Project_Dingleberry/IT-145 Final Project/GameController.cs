@@ -41,22 +41,22 @@ namespace Project_Dingleberry
             enemies = new List<Enemy>();
             activeItems = new List<Item>();
 
-            player = new Player("Player.png");
+            player = new Player("john_stick.png");
             player.SetPos(640, 360); // Set once, right here!
 
             survivalTimer = new Stopwatch();
             survivalTimer.Start();
 
             // FIX: Passing the master 'rand' to the enemies
-            Enemy chaser = new Enemy("Enemy.png", EnemyType.Chaser, rand);
+            Enemy chaser = new Enemy("enemy_chaser.png", EnemyType.Chaser, rand);
             chaser.SetPos(100, 100);
             enemies.Add(chaser);
 
-            Enemy bouncer = new Enemy("Enemy.png", EnemyType.Bouncer, rand);
+            Enemy bouncer = new Enemy("enemy_chaser.png", EnemyType.Bouncer, rand);
             bouncer.SetPos(1000, 100);
             enemies.Add(bouncer);
 
-            Enemy drifter = new Enemy("Enemy.png", EnemyType.Drifter, rand);
+            Enemy drifter = new Enemy("enemy_chaser.png", EnemyType.Drifter, rand);
             drifter.SetPos(640, 100);
             enemies.Add(drifter);
         }
@@ -147,10 +147,10 @@ namespace Project_Dingleberry
                 ItemType randomItem = itemTypes[rand.Next(itemTypes.Length)];
 
                 Color itemColor = Color.Green;
-                string imgName = "Bomb.png";
+                string imgName = "halve_enemies.png";
 
-                if (randomItem == ItemType.Life) { itemColor = Color.Black; imgName = "Life.png"; }
-                else if (randomItem == ItemType.Mine) { itemColor = Color.Yellow; imgName = "Mine.png"; }
+                if (randomItem == ItemType.Life) { itemColor = Color.Black; imgName = "extra_life.png"; }
+                else if (randomItem == ItemType.Mine) { itemColor = Color.Yellow; imgName = "mine_bad.png"; }
 
                 Item newItem = new Item(randomItem, imgName, itemColor);
 

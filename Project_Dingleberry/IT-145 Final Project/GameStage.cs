@@ -11,7 +11,7 @@ namespace Project_Dingleberry
 
         public GameStage()
         {
-            this.Size = new Size(1280, 720);
+            this.Size = new Size(1920, 1080);
             this.Text = "Project Dingleberry - Battle Zone";
             this.BackColor = Color.White;
             this.DoubleBuffered = true;
