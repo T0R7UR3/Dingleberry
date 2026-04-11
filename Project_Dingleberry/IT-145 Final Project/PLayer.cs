@@ -7,7 +7,6 @@ namespace Project_Dingleberry
     {
         public const int MaxLives = 5;
         public const int HUDWall = 40;
-        public const int EntitySize = 32;
         public const int PlayerSpeed = 8;
         public const double InvincibilitySeconds = 1.5;
         public const double DiagonalMultiplier = 0.707;
@@ -20,9 +19,11 @@ namespace Project_Dingleberry
         public int Lives => lives;
         public bool IsInvincible => (DateTime.Now - lastHit).TotalSeconds < InvincibilitySeconds;
 
-        // Constructor no longer forces a position. GameController handles it via SetPos.
         public Player(string fileName) : base(fileName, Color.Blue)
         {
+            // NEW: Player is now 60x60
+            width = 60;
+            height = 60;
         }
 
         public void ProcessMovement()
@@ -45,12 +46,14 @@ namespace Project_Dingleberry
             posY += (int)(moveY * PlayerSpeed);
         }
 
-        public void ClampToScreen(int width, int height)
+        public void ClampToScreen(int screenWidth, int screenHeight)
         {
             if (posX < 0) posX = 0;
             if (posY < HUDWall) posY = HUDWall;
-            if (posX > width - EntitySize) posX = width - EntitySize;
-            if (posY > height - EntitySize) posY = height - EntitySize;
+
+            // NEW: Uses dynamic width/height so the 60px player doesn't clip off screen
+            if (posX > screenWidth - width) posX = screenWidth - width;
+            if (posY > screenHeight - height) posY = screenHeight - height;
         }
 
         public bool PlayerHit()
@@ -66,7 +69,6 @@ namespace Project_Dingleberry
 
         public void AddLife()
         {
-            // FIX: Capped lives so the game doesn't become too easy!
             if (lives < MaxLives)
             {
                 lives += 1;

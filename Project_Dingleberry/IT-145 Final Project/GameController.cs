@@ -8,7 +8,6 @@ namespace Project_Dingleberry
 {
     internal class GameController
     {
-        private const int EntitySize = 32;
         private const int HUDWall = 40;
         private const int SafeSpawnDistance = 300;
         private const int MaxSpawnAttempts = 50;
@@ -24,7 +23,6 @@ namespace Project_Dingleberry
         private int spawnTimer = 0;
         private int spawnInterval = 100;
 
-        // The Master Random Generator
         private Random rand = new Random();
 
         private bool isGameOver = false;
@@ -41,22 +39,23 @@ namespace Project_Dingleberry
             enemies = new List<Enemy>();
             activeItems = new List<Item>();
 
-            player = new Player("Player.png");
-            player.SetPos(640, 360); // Set once, right here!
+            player = new Player("john_stick.png");
+
+            // NEW: Spawn the player in the exact center of 1080p!
+            player.SetPos(960, 540);
 
             survivalTimer = new Stopwatch();
             survivalTimer.Start();
 
-            // FIX: Passing the master 'rand' to the enemies
-            Enemy chaser = new Enemy("Enemy.png", EnemyType.Chaser, rand);
+            Enemy chaser = new Enemy("enemy_chaser.png", EnemyType.Chaser, rand);
             chaser.SetPos(100, 100);
             enemies.Add(chaser);
 
-            Enemy bouncer = new Enemy("Enemy.png", EnemyType.Bouncer, rand);
+            Enemy bouncer = new Enemy("enemy_bouncer.png", EnemyType.Bouncer, rand);
             bouncer.SetPos(1000, 100);
             enemies.Add(bouncer);
 
-            Enemy drifter = new Enemy("Enemy.png", EnemyType.Drifter, rand);
+            Enemy drifter = new Enemy("enemy_drifter.png", EnemyType.Drifter, rand);
             drifter.SetPos(640, 100);
             enemies.Add(drifter);
         }
@@ -83,7 +82,11 @@ namespace Project_Dingleberry
             if (!hasChaser) allowedTypes.Add(EnemyType.Chaser);
 
             EnemyType randomType = allowedTypes[rand.Next(allowedTypes.Count)];
-            Enemy newEnemy = new Enemy("Enemy.png", randomType, rand);
+
+            string enemySprite = randomType == EnemyType.Chaser ? "enemy_chaser.png" :
+                                 randomType == EnemyType.Bouncer ? "enemy_bouncer.png" : "enemy_drifter.png";
+
+            Enemy newEnemy = new Enemy(enemySprite, randomType, rand);
 
             int spawnX = 0;
             int spawnY = 0;
@@ -91,11 +94,10 @@ namespace Project_Dingleberry
             bool safeSpotFound = false;
             int attempts = 0;
 
-            // FIX: Capped at 50 attempts to prevent infinite loop crashes
             while (!safeSpotFound && attempts < 50)
             {
-                spawnX = rand.Next(0, gameForm.ClientSize.Width - 32);
-                spawnY = rand.Next(40, gameForm.ClientSize.Height - 32);
+                spawnX = rand.Next(0, gameForm.ClientSize.Width - 51);
+                spawnY = rand.Next(HUDWall, gameForm.ClientSize.Height - 51);
 
                 double diffX = spawnX - player.GetX();
                 double diffY = spawnY - player.GetY();
@@ -108,7 +110,6 @@ namespace Project_Dingleberry
                 attempts++;
             }
 
-            // If we couldn't find a safe spot in 50 tries, skip spawning this time
             if (safeSpotFound)
             {
                 newEnemy.SetPos(spawnX, spawnY);
@@ -123,7 +124,7 @@ namespace Project_Dingleberry
             if (isGameOver || isPaused) return;
 
             int currentSeconds = (int)survivalTimer.Elapsed.TotalSeconds;
-            if (currentSeconds / 15 >= difficultyLevel)
+            if (currentSeconds / EscalateEveryXSeconds >= difficultyLevel)
             {
                 difficultyLevel++;
                 maxEnemies += 5;
@@ -141,16 +142,16 @@ namespace Project_Dingleberry
             }
 
             itemSpawnTimer++;
-            if (itemSpawnTimer >= itemSpawnInterval && activeItems.Count < 5)
+            if (itemSpawnTimer >= itemSpawnInterval && activeItems.Count < MaxItemsOnScreen)
             {
                 ItemType[] itemTypes = (ItemType[])Enum.GetValues(typeof(ItemType));
                 ItemType randomItem = itemTypes[rand.Next(itemTypes.Length)];
 
                 Color itemColor = Color.Green;
-                string imgName = "Bomb.png";
+                string imgName = "bomb_mine.png";
 
-                if (randomItem == ItemType.Life) { itemColor = Color.Black; imgName = "Life.png"; }
-                else if (randomItem == ItemType.Mine) { itemColor = Color.Yellow; imgName = "Mine.png"; }
+                if (randomItem == ItemType.Life) { itemColor = Color.Black; imgName = "extra_life.png"; }
+                else if (randomItem == ItemType.Mine) { itemColor = Color.Yellow; imgName = "bomb_mine.png"; }
 
                 Item newItem = new Item(randomItem, imgName, itemColor);
 
@@ -159,25 +160,21 @@ namespace Project_Dingleberry
                 int spawnY = 0;
                 int attempts = 0;
 
-                // FIX: Capped attempts AND checking against everything on screen
                 while (!safeSpawnFound && attempts < 50)
                 {
                     spawnX = rand.Next(0, gameForm.ClientSize.Width - 32);
-                    spawnY = rand.Next(40, gameForm.ClientSize.Height - 32);
+                    spawnY = rand.Next(HUDWall, gameForm.ClientSize.Height - 32);
 
                     Rectangle testBox = new Rectangle(spawnX, spawnY, 32, 32);
                     safeSpawnFound = true;
 
-                    // Avoid other items
                     foreach (var existingItem in activeItems)
                     {
                         if (testBox.IntersectsWith(existingItem.Hitbox)) { safeSpawnFound = false; break; }
                     }
 
-                    // Avoid Player
                     if (safeSpawnFound && testBox.IntersectsWith(player.Hitbox)) safeSpawnFound = false;
 
-                    // Avoid Enemies
                     if (safeSpawnFound)
                     {
                         foreach (var enemy in enemies)
@@ -258,7 +255,6 @@ namespace Project_Dingleberry
 
             string finalTime = survivalTimer.Elapsed.ToString(@"mm\:ss");
 
-            // --- NEW CODE: Save the score before showing the popup ---
             HighScoreManager.SaveScore(difficultyLevel, finalTime);
 
             DialogResult result = MessageBox.Show(

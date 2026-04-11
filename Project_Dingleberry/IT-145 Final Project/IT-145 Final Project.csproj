@@ -9,4 +9,38 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Assets\Images\bomb_mine.png" />
+    <None Remove="Assets\Images\enemy_bouncer.png" />
+    <None Remove="Assets\Images\enemy_chaser.png" />
+    <None Remove="Assets\Images\enemy_drifter.png" />
+    <None Remove="Assets\Images\extra_life.png" />
+    <None Remove="Assets\Images\half_enemy.png" />
+    <None Remove="Assets\Images\john_stick.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\Images\bomb_mine.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Images\enemy_bouncer.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Images\enemy_chaser.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Images\enemy_drifter.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Images\extra_life.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Images\half_enemy.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Images\john_stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

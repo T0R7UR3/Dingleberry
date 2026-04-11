@@ -11,7 +11,8 @@ namespace Project_Dingleberry
 
         public GameStage()
         {
-            this.Size = new Size(1280, 720);
+            // NEW: Set resolution to 1080p!
+            this.Size = new Size(1920, 1080);
             this.Text = "Project Dingleberry - Battle Zone";
             this.BackColor = Color.White;
             this.DoubleBuffered = true;
@@ -21,12 +22,11 @@ namespace Project_Dingleberry
 
             controller = new GameController(this);
 
-            gameTimer.Interval = 16; // ~60 FPS
+            gameTimer.Interval = 16;
             gameTimer.Tick += (s, e) => controller.Update();
             gameTimer.Start();
         }
 
-        // NEW: A clean method to wipe the slate and start over!
         public void RestartGame()
         {
             controller = new GameController(this);

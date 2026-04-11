@@ -12,6 +12,10 @@ namespace Project_Dingleberry
         protected Image? entityImage;
         protected Color fallbackColor;
 
+        // NEW: Base size variables that can be overridden by Player and Enemy
+        protected int width = 32;
+        protected int height = 32;
+
         public Entity(string fileName, Color fallback)
         {
             fallbackColor = fallback;
@@ -22,10 +26,12 @@ namespace Project_Dingleberry
 
         public virtual void DrawEntity(Graphics g)
         {
-            if (entityImage != null) g.DrawImage(entityImage, posX, posY);
+            // NEW: Added width and height so the image shrinks to fit the box
+            if (entityImage != null) g.DrawImage(entityImage, posX, posY, width, height);
         }
 
-        public Rectangle Hitbox => new Rectangle(posX, posY, entityImage?.Width ?? 32, entityImage?.Height ?? 32);
+        // NEW: Hitbox now scales with the custom width/height
+        public Rectangle Hitbox => new Rectangle(posX, posY, width, height);
 
         public void SetPos(int x, int y)
         {
@@ -40,7 +46,7 @@ namespace Project_Dingleberry
         {
             try
             {
-                string path = Path.Combine(Application.StartupPath, "Images", fileName);
+                string path = Path.Combine(Application.StartupPath, "Assets", "Images", fileName);
                 entityImage = Image.FromFile(path);
             }
             catch
