@@ -258,6 +258,9 @@ namespace Project_Dingleberry
 
             string finalTime = survivalTimer.Elapsed.ToString(@"mm\:ss");
 
+            // --- NEW CODE: Save the score before showing the popup ---
+            HighScoreManager.SaveScore(difficultyLevel, finalTime);
+
             DialogResult result = MessageBox.Show(
                 $"{causeOfDeath}\n\nLevel Reached: {difficultyLevel}\nSurvival Time: {finalTime}",
                 "Game Over",

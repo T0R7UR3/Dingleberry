@@ -64,8 +64,14 @@ namespace Project_Dingleberry
 
         private void high_scores_Click(object sender, EventArgs e)
         {
+            // Fetch the sorted list of scores
+            var topScores = HighScoreManager.GetTopScores();
+
+            // Join them together with newlines
+            string scoreText = string.Join("\n\n", topScores);
+
             MessageBox.Show(
-                "High Scores coming in Version 1.1!\n\nKeep practicing!",
+                $"--- TOP 10 DEFENDERS ---\n\n{scoreText}",
                 "Dingleberry Entertainment",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Information);
