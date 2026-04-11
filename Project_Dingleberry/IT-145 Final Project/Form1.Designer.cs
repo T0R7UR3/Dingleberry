@@ -27,18 +27,20 @@
             // 
             title.BackColor = System.Drawing.SystemColors.ControlText;
             title.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            title.Font = new System.Drawing.Font("Bahnschrift Condensed", 72F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            title.ForeColor = System.Drawing.Color.Red;
-            title.Location = new System.Drawing.Point(487, 49);
+            title.Font = new System.Drawing.Font("Arial", 50, FontStyle.Bold);
+            title.ForeColor = System.Drawing.Color.White;
+            title.Location = new System.Drawing.Point(487, 67);
             title.Name = "title";
             title.Size = new System.Drawing.Size(675, 231);
             title.TabIndex = 0;
-            title.Text = "TITLE";
+            title.Text = "John Stick";
             title.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+
             // 
             // play
             // 
-            play.BackColor = System.Drawing.Color.Red;
+            play.BackColor = System.Drawing.Color.White;
+            play.Font = new System.Drawing.Font("Arial", 15, FontStyle.Bold);
             play.Location = new System.Drawing.Point(123, 543);
             play.Name = "play";
             play.Size = new System.Drawing.Size(266, 129);
@@ -46,10 +48,12 @@
             play.Text = "Start Game";
             play.UseVisualStyleBackColor = false;
             play.Click += new System.EventHandler(this.play_Click);
+            play.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // high_scores
             // 
-            high_scores.BackColor = System.Drawing.Color.Red;
+            high_scores.BackColor = System.Drawing.Color.White;
+            high_scores.Font = new System.Drawing.Font("Arial", 15, FontStyle.Bold);
             high_scores.Location = new System.Drawing.Point(697, 543);
             high_scores.Name = "high_scores";
             high_scores.Size = new System.Drawing.Size(258, 129);
@@ -60,7 +64,8 @@
             // 
             // exit
             // 
-            exit.BackColor = System.Drawing.Color.Red;
+            exit.BackColor = System.Drawing.Color.White;
+            exit.Font = new System.Drawing.Font("Arial", 15, FontStyle.Bold);
             exit.Location = new System.Drawing.Point(1235, 543);
             exit.Name = "exit";
             exit.Size = new System.Drawing.Size(223, 129);
