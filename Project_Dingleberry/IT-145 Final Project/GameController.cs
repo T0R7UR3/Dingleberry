@@ -148,7 +148,7 @@ namespace Project_Dingleberry
                 ItemType randomItem = itemTypes[rand.Next(itemTypes.Length)];
 
                 Color itemColor = Color.Green;
-                string imgName = "bomb_mine.png";
+                string imgName = "half_enemy.png";
 
                 if (randomItem == ItemType.Life) { itemColor = Color.Black; imgName = "extra_life.png"; }
                 else if (randomItem == ItemType.Mine) { itemColor = Color.Yellow; imgName = "bomb_mine.png"; }

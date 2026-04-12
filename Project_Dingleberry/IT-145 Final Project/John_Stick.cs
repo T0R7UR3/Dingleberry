@@ -81,5 +81,26 @@ namespace Project_Dingleberry
         {
             this.Close(); // Fully closes the application!
         }
+
+        private void instructions_Click(object sender, EventArgs e)
+       
+        {
+            
+            string myMessage = "Controls:\n" +
+                               "W, A, S, D or Up, Down, Left, Right arrow keys to move.\n" +
+                               "Avoid enemies and bombs. Both will take a life. \n" +
+                               "Collect lives (hearts) and reduce enemy count by collecting the 1/2 symbols.\n" +
+                               "A maximum of five items (bombs, lives, and 1/2's) will be available at a time, so choose wisely\n\n" +
+                               "Created by Dingleberry Entertainment.";
+
+            
+            MessageBox.Show(
+                myMessage,                 
+                "How to Play",             
+                MessageBoxButtons.OK,      
+                MessageBoxIcon.Information 
+            );
+        }
+    
     }
 }
