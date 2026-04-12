@@ -18,28 +18,31 @@ namespace Project_Dingleberry
         public bool IsMovingUp, IsMovingDown, IsMovingLeft, IsMovingRight;
 
         private int lives = 3;
-        private DateTime lastHit = DateTime.MinValue;
-        private DateTime dashStartTime = DateTime.MinValue;
-        private DateTime lastDashTime = DateTime.MinValue;
+
+        // FIX: Now we store the game time internally, updated every frame by the GameController
+        private double currentGameTime = 0;
+        private double lastHitTime = -999;
+        private double dashStartTime = -999;
+        private double lastDashTime = -999;
 
         public int Lives => lives;
 
         public bool IsHitInvincible =>
-            (DateTime.Now - lastHit).TotalSeconds < InvincibilitySeconds;
+            (currentGameTime - lastHitTime) < InvincibilitySeconds;
 
         public bool IsDashing =>
-            (DateTime.Now - dashStartTime).TotalSeconds < DashDurationSeconds;
+            (currentGameTime - dashStartTime) < DashDurationSeconds;
 
         public bool IsInvincible => IsHitInvincible || IsDashing;
 
         public bool DashReady =>
-            (DateTime.Now - lastDashTime).TotalSeconds >= DashCooldownSeconds;
+            (currentGameTime - lastDashTime) >= DashCooldownSeconds;
 
         public double DashCooldownRemaining
         {
             get
             {
-                double remaining = DashCooldownSeconds - (DateTime.Now - lastDashTime).TotalSeconds;
+                double remaining = DashCooldownSeconds - (currentGameTime - lastDashTime);
                 return remaining > 0 ? remaining : 0;
             }
         }
@@ -48,7 +51,7 @@ namespace Project_Dingleberry
         {
             get
             {
-                double elapsed = (DateTime.Now - lastDashTime).TotalSeconds;
+                double elapsed = currentGameTime - lastDashTime;
                 double percent = elapsed / DashCooldownSeconds;
 
                 if (percent < 0) return 0;
@@ -77,22 +80,21 @@ namespace Project_Dingleberry
             }
         }
 
+        // FIX: Called by GameController every frame so the player knows what time it is
+        public void UpdateTime(double gameTime)
+        {
+            currentGameTime = gameTime;
+        }
+
         public void TryDash()
         {
             bool isTryingToMove = IsMovingUp || IsMovingDown || IsMovingLeft || IsMovingRight;
 
-            if (!isTryingToMove)
-            {
-                return;
-            }
+            if (!isTryingToMove) return;
+            if (!DashReady) return;
 
-            if (!DashReady)
-            {
-                return;
-            }
-
-            dashStartTime = DateTime.Now;
-            lastDashTime = dashStartTime;
+            dashStartTime = currentGameTime;
+            lastDashTime = currentGameTime;
         }
 
         public void ProcessMovement()
@@ -132,7 +134,7 @@ namespace Project_Dingleberry
         {
             if (!IsInvincible)
             {
-                lastHit = DateTime.Now;
+                lastHitTime = currentGameTime;
                 lives -= 1;
                 return true;
             }
@@ -152,6 +154,8 @@ namespace Project_Dingleberry
         {
             if (IsHitInvincible)
             {
+                // We can keep DateTime.Now here because this is strictly for the visual 
+                // blinking effect, it doesn't affect gameplay logic!
                 if ((DateTime.Now.Millisecond / 100) % 2 == 0)
                 {
                     return;

@@ -29,11 +29,13 @@ namespace Project_Dingleberry
 
         private string actualSprite;
         public bool IsSpawning { get; private set; }
-        private DateTime spawnStartTime;
+
+        // FIX: Uses double for in-game time tracking
+        private double spawnStartTime;
         private const double TelegraphDurationSeconds = 1.0;
 
-        
-        public Enemy(string fileName, EnemyType enemyType, Random sharedRand) : base("warning.png", Color.Red)
+        // FIX: Constructor now takes the current game time when spawned
+        public Enemy(string fileName, EnemyType enemyType, Random sharedRand, double gameTime) : base("warning.png", Color.Red)
         {
             Type = enemyType;
             rand = sharedRand;
@@ -43,7 +45,7 @@ namespace Project_Dingleberry
 
             actualSprite = fileName;
             IsSpawning = true;
-            spawnStartTime = DateTime.Now;
+            spawnStartTime = gameTime;
         }
 
         public override Rectangle Hitbox
@@ -59,11 +61,12 @@ namespace Project_Dingleberry
             }
         }
 
-        public void Update(Player target, int screenWidth, int screenHeight)
+        // FIX: Now accepts gameTime to check spawn telegraphs safely
+        public void Update(Player target, int screenWidth, int screenHeight, double gameTime)
         {
             if (IsSpawning)
             {
-                if ((DateTime.Now - spawnStartTime).TotalSeconds >= TelegraphDurationSeconds)
+                if ((gameTime - spawnStartTime) >= TelegraphDurationSeconds)
                 {
                     IsSpawning = false;
                     SetImage(actualSprite);
@@ -74,7 +77,6 @@ namespace Project_Dingleberry
                 }
             }
 
-            
             switch (Type)
             {
                 case EnemyType.Chaser:

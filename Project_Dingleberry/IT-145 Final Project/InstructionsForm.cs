@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
@@ -7,6 +8,9 @@ namespace Project_Dingleberry
 {
     public partial class InstructionsForm : Form
     {
+        // NEW: Dictionary to hold our images in memory so we don't hit the hard drive on every paint frame!
+        private Dictionary<string, Image> imageCache = new Dictionary<string, Image>();
+
         public InstructionsForm()
         {
             // Setup the window
@@ -18,7 +22,7 @@ namespace Project_Dingleberry
             this.MaximizeBox = false;
             this.MinimizeBox = false;
 
-            // FIX 1: Double Buffering to completely eliminate form flickering when dragged
+            // Double Buffering to completely eliminate form flickering when dragged
             this.DoubleBuffered = true;
 
             // Moved the Close button down to fit the taller window
@@ -33,18 +37,38 @@ namespace Project_Dingleberry
             this.Controls.Add(closeButton);
         }
 
+        // FIX 1: Check the cache before hitting the hard drive!
         private Image LoadSprite(string fileName)
         {
+            if (imageCache.ContainsKey(fileName))
+            {
+                return imageCache[fileName];
+            }
+
             try
             {
-                return Image.FromFile(Path.Combine(AppContext.BaseDirectory, "Assets", "Images", fileName));
+                Image loadedImg = Image.FromFile(Path.Combine(AppContext.BaseDirectory, "Assets", "Images", fileName));
+                imageCache[fileName] = loadedImg; // Save it for next time
+                return loadedImg;
             }
             catch
             {
                 Bitmap bmp = new Bitmap(32, 32);
                 using (Graphics g = Graphics.FromImage(bmp)) { g.Clear(Color.Red); }
+                imageCache[fileName] = bmp; // Cache the fallback image too
                 return bmp;
             }
+        }
+
+        // FIX 2: Clean up memory when the form closes
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            foreach (var img in imageCache.Values)
+            {
+                img.Dispose();
+            }
+            imageCache.Clear();
+            base.OnFormClosed(e);
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -53,7 +77,7 @@ namespace Project_Dingleberry
             Graphics g = e.Graphics;
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
-            // FIX 2: Wrapped the Fonts in 'using' statements to clean up Graphics Memory!
+            // Wrapped the Fonts in 'using' statements to clean up Graphics Memory!
             using (Font titleFont = new Font("Arial", 24, FontStyle.Bold))
             using (Font sectionFont = new Font("Arial", 18, FontStyle.Bold))
             using (Font textFont = new Font("Arial", 12, FontStyle.Regular))
@@ -124,7 +148,7 @@ namespace Project_Dingleberry
                 g.DrawImage(LoadSprite("warning.png"), 30, currentY, 45, 45);
                 g.DrawString("Telegraph: A 1-second warning before an enemy spawns.", textFont, textBrush, new PointF(85, currentY + 10));
 
-            } // <--- This bracket ensures the fonts are disposed of properly!
+            }
         }
     }
 }

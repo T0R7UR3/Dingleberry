@@ -39,6 +39,7 @@ internal class GameController
 
     private int itemSpawnTimer;
     private readonly int itemSpawnInterval = 300;
+
     public GameController(GameStage form)
     {
         gameForm = form;
@@ -48,15 +49,16 @@ internal class GameController
 
         survivalTimer.Start();
 
-        Enemy chaser = new("enemy_chaser.png", EnemyType.Chaser, rand);
+        // FIX: We pass 0 as the starting time for the initial enemies
+        Enemy chaser = new("enemy_chaser.png", EnemyType.Chaser, rand, 0);
         chaser.SetPos(100, 100);
         enemies.Add(chaser);
 
-        Enemy bouncer = new("enemy_bouncer.png", EnemyType.Bouncer, rand);
+        Enemy bouncer = new("enemy_bouncer.png", EnemyType.Bouncer, rand, 0);
         bouncer.SetPos(1000, 100);
         enemies.Add(bouncer);
 
-        Enemy drifter = new("enemy_drifter.png", EnemyType.Drifter, rand);
+        Enemy drifter = new("enemy_drifter.png", EnemyType.Drifter, rand, 0);
         drifter.SetPos(640, 100);
         enemies.Add(drifter);
     }
@@ -80,7 +82,8 @@ internal class GameController
         }
     }
 
-    private void SpawnRandomEnemy()
+    // FIX: Accepts gameTime to pass to the new enemy
+    private void SpawnRandomEnemy(double gameTime)
     {
         bool hasChaser = false;
 
@@ -112,7 +115,7 @@ internal class GameController
                 ? "enemy_bouncer.png"
                 : "enemy_drifter.png";
 
-        Enemy newEnemy = new(enemySprite, randomType, rand);
+        Enemy newEnemy = new(enemySprite, randomType, rand, gameTime);
 
         int spawnX = 0;
         int spawnY = 0;
@@ -149,44 +152,20 @@ internal class GameController
 
         if (player.Lives <= 1)
         {
-            if (roll < 50)
-            {
-                return ItemType.Life;
-            }
-
-            if (roll < 85)
-            {
-                return ItemType.Bomb;
-            }
-
+            if (roll < 50) return ItemType.Life;
+            if (roll < 85) return ItemType.Bomb;
             return ItemType.Mine;
         }
 
         if (player.Lives == 2)
         {
-            if (roll < 45)
-            {
-                return ItemType.Life;
-            }
-
-            if (roll < 80)
-            {
-                return ItemType.Bomb;
-            }
-
+            if (roll < 45) return ItemType.Life;
+            if (roll < 80) return ItemType.Bomb;
             return ItemType.Mine;
         }
 
-        if (roll < 40)
-        {
-            return ItemType.Bomb;
-        }
-
-        if (roll < 75)
-        {
-            return ItemType.Life;
-        }
-
+        if (roll < 40) return ItemType.Bomb;
+        if (roll < 75) return ItemType.Life;
         return ItemType.Mine;
     }
 
@@ -276,7 +255,11 @@ internal class GameController
             return;
         }
 
-        int currentSeconds = (int)survivalTimer.Elapsed.TotalSeconds;
+        // FIX: Grab the current game time and send it to the player
+        double currentGameTime = survivalTimer.Elapsed.TotalSeconds;
+        player.UpdateTime(currentGameTime);
+
+        int currentSeconds = (int)currentGameTime;
 
         if (currentSeconds / EscalateEveryXSeconds >= difficultyLevel)
         {
@@ -296,7 +279,7 @@ internal class GameController
 
         if (spawnTimer >= spawnInterval && enemies.Count < maxEnemies)
         {
-            SpawnRandomEnemy();
+            SpawnRandomEnemy(currentGameTime);
             spawnTimer = 0;
         }
 
@@ -337,25 +320,10 @@ internal class GameController
 
                 safeSpawnFound = true;
 
-                if (testBox.IntersectsWith(player.Hitbox))
-                {
-                    safeSpawnFound = false;
-                }
-
-                if (safeSpawnFound && !IsFarEnoughFromOtherItems(testBox))
-                {
-                    safeSpawnFound = false;
-                }
-
-                if (safeSpawnFound && !IsFarEnoughFromEnemies(testBox))
-                {
-                    safeSpawnFound = false;
-                }
-
-                if (safeSpawnFound && !IsFairDistanceFromPlayer(testBox, randomItem))
-                {
-                    safeSpawnFound = false;
-                }
+                if (testBox.IntersectsWith(player.Hitbox)) safeSpawnFound = false;
+                if (safeSpawnFound && !IsFarEnoughFromOtherItems(testBox)) safeSpawnFound = false;
+                if (safeSpawnFound && !IsFarEnoughFromEnemies(testBox)) safeSpawnFound = false;
+                if (safeSpawnFound && !IsFairDistanceFromPlayer(testBox, randomItem)) safeSpawnFound = false;
 
                 attempts++;
             }
@@ -379,10 +347,8 @@ internal class GameController
                 if (type == ItemType.Bomb)
                 {
                     SoundManager.PlayItemBomb();
-
                     int enemiesToDestroy = enemies.Count / 2;
 
-                    // TWEAK: Remove enemies from the back of the list to prevent rendering glitches
                     for (int j = 0; j < enemiesToDestroy; j++)
                     {
                         if (enemies.Count > 0)
@@ -423,7 +389,8 @@ internal class GameController
 
         for (int i = enemies.Count - 1; i >= 0; i--)
         {
-            enemies[i].Update(player, gameForm.ClientSize.Width, gameForm.ClientSize.Height);
+            // FIX: Pass the currentGameTime to the enemy update loop
+            enemies[i].Update(player, gameForm.ClientSize.Width, gameForm.ClientSize.Height, currentGameTime);
 
             if (!enemies[i].IsSpawning && player.Hitbox.IntersectsWith(enemies[i].Hitbox))
             {
@@ -450,11 +417,9 @@ internal class GameController
     {
         isGameOver = true;
         survivalTimer.Stop();
-
         SoundManager.PlayGameOver();
 
         string finalTime = survivalTimer.Elapsed.ToString(@"mm\:ss");
-
         HighScoreManager.SaveScore(difficultyLevel, finalTime);
 
         DialogResult result = MessageBox.Show(
