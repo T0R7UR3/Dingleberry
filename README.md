@@ -1,68 +1,75 @@
-# Project Dingleberry
-### Developed by Dingleberry Entertainment (DBE)
+John Stick
+Developed by Dingleberry Entertainment (DBE) Project Lead: Murdock John MacAskill III
+"Play hard. Respawn harder."
 
-**Project Dingleberry** is a high-intensity, top-down **Arena Avoider** survival game. Built on the cutting-edge **.NET 10 (LTS)** framework, it challenges players to navigate a claustrophobic "Battle Zone" against an escalating swarm of intelligent AI entities.
+Team: The Dingleberry Three (Murdock, Beth, Landon)
 
-> *“Play hard. Respawn harder”*
+John Stick is a high-intensity, top-down Arena Avoider survival game. Built on the .NET 10 (LTS) framework, it challenges players to step into the shoes of the legendary John Stick to survive a claustrophobic "Battle Zone" against an escalating swarm of intelligent AI entities.
 
----
+🕹️ Gameplay & Controls
+You control John Stick (Our Hero). In a world of evil stickmen, movement and timing are your only weapons. Weave through the swarm, trigger screen-clearing bombs, and manage your tactical dash to survive the night.
 
-## 🕹️ Gameplay & Controls
+Movement: W, A, S, D or Arrow Keys.
 
-You control the **Blue Hero**. In a world of red squares, movement is your only weapon. Weave through the swarm, trigger screen-clearing bombs, and manage your invincibility windows to survive.
+Tactical Dash: Spacebar. Provides a high-speed, invincible burst of movement on a 3-second cooldown.
 
-* **Movement:** `W, A, S, D` or `Arrow Keys`
-* **Health:** 3 Lives (Regenerate via Black Life items).
-* **Invincibility:** 1.5 seconds of "Flicker State" after taking damage.
+Health: Start with 3 Lives (Max 5). Regenerate via items.
 
----
+Invincibility: 1.5 seconds of "Flicker State" after taking damage.
 
-## 🚀 Key Features
+Pause: P or Escape.
 
-### 1. "Boiling Frog" Difficulty System
-The game utilizes a precision survival clock to manage tension. Every **15 seconds**, the game level increases, bumping the enemy cap by **+5** and aggressively decreasing the spawn interval. By the 2-minute mark, the arena becomes a test of near-perfect micro-movement.
+🚀 Key Features
+1. "Boiling Frog" Difficulty System
+The game utilizes a precision survival clock to manage tension. Every 15 seconds, the game level increases, bumping the enemy cap by +5 and aggressively decreasing the spawn interval. By the 2-minute mark, the arena becomes a test of near-perfect micro-movement.
 
-### 2. Risk/Reward Item System
-Dynamic items spawn every 5 seconds, forcing the player to abandon safe corners:
-* **🟢 Green Bomb:** Screen-wipe mechanic that obliterates 50% of the current swarm.
-* **⚫ Black Life:** High-value health regeneration.
-* **🟡 Landmine:** Stationary hazards that punish careless movement.
+2. Risk/Reward Item System
+Dynamic items spawn every 5 seconds, forcing you to abandon safe corners:
 
-### 3. Kinetic AI Swarm
-* **Chaser:** Relentless pathfinding AI that tracks player coordinates.
-* **Bouncer:** High-speed physics-based entities that ricochet off screen boundaries.
-* **Drifter:** Unpredictable, random-walk AI designed to break player patterns.
+half_enemy.png (Smart Bomb): A screen-wipe mechanic that obliterates 50% of the current swarm.
 
----
+extra_life.png (Extra Life): High-value health regeneration that adds +1 to your life count.
 
-## 🛠️ Technical Specifications
+bomb_mine.png (Landmine): Stationary hazards that cost a life if stepped on, but clear all other mines from the screen.
 
-* **Framework:** .NET 10.0 (LTS)
-* **Language:** C#
-* **Engine:** Custom GDI+ Rendering Engine
-* **Resolution:** 1280x720 (Widescreen)
-* **Physics:** $0.707$ Diagonal Normalization (No diagonal speed advantage).
-* **Precision:** High-fidelity `Stopwatch` class for frame-independent scoring.
+3. Kinetic AI Swarm
+Chaser (enemy_chaser.png): Relentless pathfinding AI that tracks player coordinates.
 
----
+Bouncer (enemy_bouncer.png): High-speed physics-based entities that ricochet off screen boundaries.
 
-## 👥 The Dingleberry Three (Credits)
+Drifter (enemy_drifter.png): Unpredictable, random-walk AI designed to break player patterns.
 
+🛠️ Technical Specifications
+Framework: .NET 10.0 (LTS).
+
+Language: C#.
+
+Engine: Custom GDI+ Rendering Engine.
+
+Resolution: 1920x1080 (Full HD).
+
+Audio Engine: Powered by NAudio. Features a dedicated mixer for overlapping sound effects and preloaded cached audio.
+
+Physics: 0.707 Diagonal Normalization. No diagonal speed advantage; John Stick moves at a consistent speed in all directions.
+
+Memory Optimization: Image Caching system prevents repeated disk I/O, ensuring smooth frame rates even with dozens of active entities.
+
+👥 The Dingleberry Three (Credits)
 This project was developed through a collaborative 1/3 split:
 
-* **Murdock**
-* **Beth**
-* **Landon**
+Murdock: Lead Architecture & Game Controller.
 
----
+Beth: Asset Management & UI Design.
 
-## 📦 Installation
+Landon: AI Behavior & Physics.
 
-1.  Download the latest **Release** zip.
-2.  Ensure **.NET 10 Runtime** is installed.
-3.  **Important:** The `Images/` folder must remain in the same directory as `Project_Dingleberry.exe`.
-4.  Run and survive.
+📦 Installation
+Download the latest Release zip.
 
----
+Ensure .NET 10 Runtime is installed.
+
+Important: The Assets/ folder must remain in the same directory as Project_Dingleberry.exe to load sprites and sounds.
+
+Run and survive.
 
 © 2026 Dingleberry Entertainment. All Rights Reserved.
