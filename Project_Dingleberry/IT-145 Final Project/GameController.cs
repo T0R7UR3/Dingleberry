@@ -425,7 +425,7 @@ internal class GameController
         {
             enemies[i].Update(player, gameForm.ClientSize.Width, gameForm.ClientSize.Height);
 
-            if (player.Hitbox.IntersectsWith(enemies[i].Hitbox))
+            if (!enemies[i].IsSpawning && player.Hitbox.IntersectsWith(enemies[i].Hitbox))
             {
                 bool tookDamage = player.PlayerHit();
 

@@ -25,16 +25,25 @@ namespace Project_Dingleberry
 
         private int speedX = BaseSpeed;
         private int speedY = BaseSpeed;
-
         private Random rand;
 
-        public Enemy(string fileName, EnemyType enemyType, Random sharedRand) : base(fileName, Color.Red)
+        private string actualSprite;
+        public bool IsSpawning { get; private set; }
+        private DateTime spawnStartTime;
+        private const double TelegraphDurationSeconds = 1.0;
+
+        
+        public Enemy(string fileName, EnemyType enemyType, Random sharedRand) : base("warning.png", Color.Red)
         {
             Type = enemyType;
             rand = sharedRand;
 
             width = 51;
             height = 51;
+
+            actualSprite = fileName;
+            IsSpawning = true;
+            spawnStartTime = DateTime.Now;
         }
 
         public override Rectangle Hitbox
@@ -52,6 +61,20 @@ namespace Project_Dingleberry
 
         public void Update(Player target, int screenWidth, int screenHeight)
         {
+            if (IsSpawning)
+            {
+                if ((DateTime.Now - spawnStartTime).TotalSeconds >= TelegraphDurationSeconds)
+                {
+                    IsSpawning = false;
+                    SetImage(actualSprite);
+                }
+                else
+                {
+                    return;
+                }
+            }
+
+            
             switch (Type)
             {
                 case EnemyType.Chaser:

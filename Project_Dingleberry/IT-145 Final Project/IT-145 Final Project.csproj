@@ -17,6 +17,7 @@
     <None Remove="Assets\Images\extra_life.png" />
     <None Remove="Assets\Images\half_enemy.png" />
     <None Remove="Assets\Images\john_stick.png" />
+    <None Remove="Assets\Images\warning.png" />
     <None Remove="Assets\Sounds\sfx_GameOver.wav" />
     <None Remove="Assets\Sounds\sfx_ItemBomb.wav" />
     <None Remove="Assets\Sounds\sfx_ItemLife.wav" />
@@ -47,6 +48,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Images\john_stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Images\warning.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Sounds\sfx_GameOver.wav">
