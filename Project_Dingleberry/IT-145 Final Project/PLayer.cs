@@ -21,9 +21,21 @@ namespace Project_Dingleberry
 
         public Player(string fileName) : base(fileName, Color.Blue)
         {
-            // NEW: Player is now 60x60
             width = 60;
             height = 60;
+        }
+
+        public override Rectangle Hitbox
+        {
+            get
+            {
+                return new Rectangle(
+                    posX + 20,
+                    posY + 8,
+                    20,
+                    44
+                );
+            }
         }
 
         public void ProcessMovement()
@@ -51,7 +63,6 @@ namespace Project_Dingleberry
             if (posX < 0) posX = 0;
             if (posY < HUDWall) posY = HUDWall;
 
-            // NEW: Uses dynamic width/height so the 60px player doesn't clip off screen
             if (posX > screenWidth - width) posX = screenWidth - width;
             if (posY > screenHeight - height) posY = screenHeight - height;
         }
@@ -64,6 +75,7 @@ namespace Project_Dingleberry
                 lives -= 1;
                 return true;
             }
+
             return false;
         }
 
@@ -79,8 +91,12 @@ namespace Project_Dingleberry
         {
             if (IsInvincible)
             {
-                if ((DateTime.Now.Millisecond / 100) % 2 == 0) return;
+                if ((DateTime.Now.Millisecond / 100) % 2 == 0)
+                {
+                    return;
+                }
             }
+
             base.DrawEntity(g);
         }
     }

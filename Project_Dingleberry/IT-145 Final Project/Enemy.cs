@@ -33,9 +33,21 @@ namespace Project_Dingleberry
             Type = enemyType;
             rand = sharedRand;
 
-            // NEW: Enemies are now 51x51
             width = 51;
             height = 51;
+        }
+
+        public override Rectangle Hitbox
+        {
+            get
+            {
+                return new Rectangle(
+                    posX + 17,
+                    posY + 6,
+                    16,
+                    38
+                );
+            }
         }
 
         public void Update(Player target, int screenWidth, int screenHeight)
@@ -53,7 +65,6 @@ namespace Project_Dingleberry
                     posX += speedX;
                     posY += speedY;
 
-                    // NEW: Uses custom width/height for perfect bouncing
                     if (posX <= 0 || posX >= screenWidth - width) speedX *= -1;
                     if (posY <= HUDWall || posY >= screenHeight - height) speedY *= -1;
                     break;

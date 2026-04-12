@@ -18,5 +18,18 @@ namespace Project_Dingleberry
         {
             Type = type;
         }
+
+        public override Rectangle Hitbox
+        {
+            get
+            {
+                return new Rectangle(
+                    posX + 8,
+                    posY + 8,
+                    width - 16,
+                    height - 16
+                );
+            }
+        }
     }
 }
