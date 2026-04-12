@@ -99,20 +99,10 @@ namespace Project_Dingleberry
         {
             SoundManager.PlayMenuInstructions();
 
-            string myMessage = "Controls:\n" +
-                               "W, A, S, D or Up, Down, Left, Right arrow keys to move.\n" +
-                               "Avoid enemies and bombs. Both will take a life. \n" +
-                               "Collect lives (hearts) and reduce enemy count by collecting the 1/2 symbols.\n" +
-                               "A maximum of five items (bombs, lives, and 1/2's) will be available at a time, so choose wisely\n\n" +
-                               "Created by Dingleberry Entertainment.";
-
-            MessageBox.Show(
-                myMessage,
-                "How to Play",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information);
+            // Open the new visual instructions window
+            InstructionsForm infoWindow = new InstructionsForm();
+            infoWindow.ShowDialog(); // ShowDialog freezes the main menu until they close the instructions
         }
-
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
             SoundManager.DisposeAll();

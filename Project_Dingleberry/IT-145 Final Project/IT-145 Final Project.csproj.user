@@ -4,6 +4,9 @@
     <Compile Update="GameStage.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="InstructionsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="John_Stick.cs">
       <SubType>Form</SubType>
     </Compile>
