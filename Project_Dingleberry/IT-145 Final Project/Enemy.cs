@@ -12,6 +12,14 @@ namespace Project_Dingleberry
 
     public class Enemy : Entity
     {
+        //T17 Code added here -BDD
+
+        public bool IsSpawning { get; private set; } = true;
+        private int spawnTimer = 50; 
+        private string finalSprite;
+
+        //Code ended here -BDD
+
         private const int ChaserSpeed = 3;
         private const int BaseSpeed = 4;
         private const int HUDWall = 40;
@@ -30,6 +38,13 @@ namespace Project_Dingleberry
 
         public Enemy(string fileName, EnemyType enemyType, Random sharedRand) : base(fileName, Color.Red)
         {
+            //T17 code added here -BDD
+
+            finalSprite = fileName;
+            SetImage("warning.png"); // Placeholder for warning sprite
+
+            //Code ended here -BDD
+
             Type = enemyType;
             rand = sharedRand;
 
@@ -52,6 +67,21 @@ namespace Project_Dingleberry
 
         public void Update(Player target, int screenWidth, int screenHeight)
         {
+            //T17 code added here -BDD
+            
+            if(IsSpawning)
+            {
+                spawnTimer--;
+                if (spawnTimer <= 0)
+                {
+                    IsSpawning = false;
+                    SetImage(finalSprite); // Switch to final sprite after spawning
+                }
+                return; // Skip movement while spawning
+            }
+
+            //Code ended here -BDD
+
             switch (Type)
             {
                 case EnemyType.Chaser:

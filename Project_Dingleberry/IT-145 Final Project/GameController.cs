@@ -200,6 +200,7 @@ namespace Project_Dingleberry
                 {
                     ItemType type = activeItems[i].Type;
                     activeItems.RemoveAt(i);
+                    continue;
 
                     if (type == ItemType.Bomb)
                     {
@@ -229,6 +230,25 @@ namespace Project_Dingleberry
             {
                 enemies[i].Update(player, gameForm.ClientSize.Width, gameForm.ClientSize.Height);
 
+                //T17 Code added here -BDD
+
+                if (!enemies[i].IsSpawning && player.Hitbox.IntersectsWith(enemies[i].Hitbox))
+
+                {
+               
+                    bool tookDamage = player.PlayerHit();
+                    if (tookDamage)
+                    {
+                        enemies.RemoveAt(i);
+                        if (player.Lives <= 0)
+                        {
+                            TriggerGameOver("You got hit by an enemy!");
+                            return;
+                        }
+                    }
+                }
+
+
                 if (player.Hitbox.IntersectsWith(enemies[i].Hitbox))
                 {
                     bool tookDamage = player.PlayerHit();
@@ -241,6 +261,7 @@ namespace Project_Dingleberry
                             TriggerGameOver("You got swarmed!");
                             return;
                         }
+                        continue;
                     }
                 }
             }
