@@ -24,10 +24,10 @@ namespace Project_Dingleberry
             get
             {
                 return new Rectangle(
-                    posX + 8,
-                    posY + 8,
-                    width - 16,
-                    height - 16
+                    posX - 6,
+                    posY - 6,
+                    width + 12,
+                    height + 12
                 );
             }
         }
