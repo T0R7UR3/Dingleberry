@@ -12,7 +12,7 @@ namespace Project_Dingleberry;
 public static class SoundManager
 {
     private static readonly string SoundFolder =
-        Path.Combine(Application.StartupPath, "Assets", "Sounds");
+    Path.Combine(AppContext.BaseDirectory, "Assets", "Sounds");
 
     private static readonly Dictionary<string, CachedSound> CachedSounds = [];
 
