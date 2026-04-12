@@ -2,11 +2,15 @@
 using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
+using System.Collections.Generic;
 
 namespace Project_Dingleberry
 {
     public class Entity
     {
+        // NEW: This dictionary caches the images so we don't load from the hard drive 100 times!
+        private static Dictionary<string, Image> ImageCache = new Dictionary<string, Image>();
+
         protected int posX;
         protected int posY;
         protected Image? entityImage;
@@ -47,10 +51,21 @@ namespace Project_Dingleberry
 
         public void SetImage(string fileName)
         {
+            // NEW: Check if we already loaded this image!
+            if (ImageCache.ContainsKey(fileName))
+            {
+                entityImage = ImageCache[fileName];
+                return;
+            }
+
             try
             {
                 string path = Path.Combine(Application.StartupPath, "Assets", "Images", fileName);
-                entityImage = Image.FromFile(path);
+
+                // Load it, but save a copy in the cache for next time
+                Image loadedImg = Image.FromFile(path);
+                ImageCache[fileName] = loadedImg;
+                entityImage = loadedImg;
             }
             catch
             {

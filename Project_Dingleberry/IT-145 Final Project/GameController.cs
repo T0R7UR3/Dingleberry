@@ -1,10 +1,6 @@
 ﻿#pragma warning disable IDE0130
 
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
-using System.Windows.Forms;
 
 namespace Project_Dingleberry;
 
@@ -386,11 +382,12 @@ internal class GameController
 
                     int enemiesToDestroy = enemies.Count / 2;
 
+                    // TWEAK: Remove enemies from the back of the list to prevent rendering glitches
                     for (int j = 0; j < enemiesToDestroy; j++)
                     {
                         if (enemies.Count > 0)
                         {
-                            enemies.RemoveAt(0);
+                            enemies.RemoveAt(enemies.Count - 1);
                         }
                     }
                 }
