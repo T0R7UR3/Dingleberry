@@ -9,6 +9,7 @@ namespace Project_Dingleberry
         public John_Stick()
         {
             InitializeComponent();
+            SoundManager.Initialize();
             SetupSplashScreen();
         }
 
@@ -54,20 +55,32 @@ namespace Project_Dingleberry
 
         private void play_Click(object sender, EventArgs e)
         {
-            GameStage gameWindow = new GameStage();
+            SoundManager.PlayMenuStart();
 
-            this.Hide();
-            gameWindow.Show();
+            System.Windows.Forms.Timer startTimer = new System.Windows.Forms.Timer();
+            startTimer.Interval = 120;
 
-            gameWindow.FormClosed += (s, args) => this.Close();
+            startTimer.Tick += (s, args) =>
+            {
+                startTimer.Stop();
+                startTimer.Dispose();
+
+                GameStage gameWindow = new GameStage();
+
+                this.Hide();
+                gameWindow.Show();
+
+                gameWindow.FormClosed += (sender2, args2) => this.Close();
+            };
+
+            startTimer.Start();
         }
 
         private void high_scores_Click(object sender, EventArgs e)
         {
-            // Fetch the sorted list of scores
-            var topScores = HighScoreManager.GetTopScores();
+            SoundManager.PlayMenuHighScore();
 
-            // Join them together with newlines
+            var topScores = HighScoreManager.GetTopScores();
             string scoreText = string.Join("\n\n", topScores);
 
             MessageBox.Show(
@@ -79,13 +92,13 @@ namespace Project_Dingleberry
 
         private void exit_Click(object sender, EventArgs e)
         {
-            this.Close(); // Fully closes the application!
+            this.Close();
         }
 
         private void instructions_Click(object sender, EventArgs e)
-       
         {
-            
+            SoundManager.PlayMenuInstructions();
+
             string myMessage = "Controls:\n" +
                                "W, A, S, D or Up, Down, Left, Right arrow keys to move.\n" +
                                "Avoid enemies and bombs. Both will take a life. \n" +
@@ -93,14 +106,17 @@ namespace Project_Dingleberry
                                "A maximum of five items (bombs, lives, and 1/2's) will be available at a time, so choose wisely\n\n" +
                                "Created by Dingleberry Entertainment.";
 
-            
             MessageBox.Show(
-                myMessage,                 
-                "How to Play",             
-                MessageBoxButtons.OK,      
-                MessageBoxIcon.Information 
-            );
+                myMessage,
+                "How to Play",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
         }
-    
+
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            SoundManager.DisposeAll();
+            base.OnFormClosed(e);
+        }
     }
 }

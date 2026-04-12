@@ -41,7 +41,6 @@ namespace Project_Dingleberry
 
             player = new Player("john_stick.png");
 
-            // NEW: Spawn the player in the exact center of 1080p!
             player.SetPos(960, 540);
 
             survivalTimer = new Stopwatch();
@@ -73,28 +72,41 @@ namespace Project_Dingleberry
         private void SpawnRandomEnemy()
         {
             bool hasChaser = false;
+
             foreach (var enemy in enemies)
             {
-                if (enemy.Type == EnemyType.Chaser) { hasChaser = true; break; }
+                if (enemy.Type == EnemyType.Chaser)
+                {
+                    hasChaser = true;
+                    break;
+                }
             }
 
-            List<EnemyType> allowedTypes = new List<EnemyType> { EnemyType.Bouncer, EnemyType.Drifter };
-            if (!hasChaser) allowedTypes.Add(EnemyType.Chaser);
+            List<EnemyType> allowedTypes = new List<EnemyType>
+            {
+                EnemyType.Bouncer,
+                EnemyType.Drifter
+            };
+
+            if (!hasChaser)
+            {
+                allowedTypes.Add(EnemyType.Chaser);
+            }
 
             EnemyType randomType = allowedTypes[rand.Next(allowedTypes.Count)];
 
             string enemySprite = randomType == EnemyType.Chaser ? "enemy_chaser.png" :
-                                 randomType == EnemyType.Bouncer ? "enemy_bouncer.png" : "enemy_drifter.png";
+                                 randomType == EnemyType.Bouncer ? "enemy_bouncer.png" :
+                                 "enemy_drifter.png";
 
             Enemy newEnemy = new Enemy(enemySprite, randomType, rand);
 
             int spawnX = 0;
             int spawnY = 0;
-            int safeDistance = 300;
             bool safeSpotFound = false;
             int attempts = 0;
 
-            while (!safeSpotFound && attempts < 50)
+            while (!safeSpotFound && attempts < MaxSpawnAttempts)
             {
                 spawnX = rand.Next(0, gameForm.ClientSize.Width - 51);
                 spawnY = rand.Next(HUDWall, gameForm.ClientSize.Height - 51);
@@ -103,10 +115,11 @@ namespace Project_Dingleberry
                 double diffY = spawnY - player.GetY();
                 double distance = Math.Sqrt(Math.Pow(diffX, 2) + Math.Pow(diffY, 2));
 
-                if (distance >= safeDistance)
+                if (distance >= SafeSpawnDistance)
                 {
                     safeSpotFound = true;
                 }
+
                 attempts++;
             }
 
@@ -124,17 +137,23 @@ namespace Project_Dingleberry
             if (isGameOver || isPaused) return;
 
             int currentSeconds = (int)survivalTimer.Elapsed.TotalSeconds;
+
             if (currentSeconds / EscalateEveryXSeconds >= difficultyLevel)
             {
                 difficultyLevel++;
                 maxEnemies += 5;
-                if (spawnInterval > 20) spawnInterval -= 10;
+
+                if (spawnInterval > 20)
+                {
+                    spawnInterval -= 10;
+                }
             }
 
             player.ProcessMovement();
             player.ClampToScreen(gameForm.ClientSize.Width, gameForm.ClientSize.Height);
 
             spawnTimer++;
+
             if (spawnTimer >= spawnInterval && enemies.Count < maxEnemies)
             {
                 SpawnRandomEnemy();
@@ -142,6 +161,7 @@ namespace Project_Dingleberry
             }
 
             itemSpawnTimer++;
+
             if (itemSpawnTimer >= itemSpawnInterval && activeItems.Count < MaxItemsOnScreen)
             {
                 ItemType[] itemTypes = (ItemType[])Enum.GetValues(typeof(ItemType));
@@ -150,8 +170,16 @@ namespace Project_Dingleberry
                 Color itemColor = Color.Green;
                 string imgName = "half_enemy.png";
 
-                if (randomItem == ItemType.Life) { itemColor = Color.Black; imgName = "extra_life.png"; }
-                else if (randomItem == ItemType.Mine) { itemColor = Color.Yellow; imgName = "bomb_mine.png"; }
+                if (randomItem == ItemType.Life)
+                {
+                    itemColor = Color.Black;
+                    imgName = "extra_life.png";
+                }
+                else if (randomItem == ItemType.Mine)
+                {
+                    itemColor = Color.Yellow;
+                    imgName = "bomb_mine.png";
+                }
 
                 Item newItem = new Item(randomItem, imgName, itemColor);
 
@@ -170,16 +198,27 @@ namespace Project_Dingleberry
 
                     foreach (var existingItem in activeItems)
                     {
-                        if (testBox.IntersectsWith(existingItem.Hitbox)) { safeSpawnFound = false; break; }
+                        if (testBox.IntersectsWith(existingItem.Hitbox))
+                        {
+                            safeSpawnFound = false;
+                            break;
+                        }
                     }
 
-                    if (safeSpawnFound && testBox.IntersectsWith(player.Hitbox)) safeSpawnFound = false;
+                    if (safeSpawnFound && testBox.IntersectsWith(player.Hitbox))
+                    {
+                        safeSpawnFound = false;
+                    }
 
                     if (safeSpawnFound)
                     {
                         foreach (var enemy in enemies)
                         {
-                            if (testBox.IntersectsWith(enemy.Hitbox)) { safeSpawnFound = false; break; }
+                            if (testBox.IntersectsWith(enemy.Hitbox))
+                            {
+                                safeSpawnFound = false;
+                                break;
+                            }
                         }
                     }
 
@@ -191,6 +230,7 @@ namespace Project_Dingleberry
                     newItem.SetPos(spawnX, spawnY);
                     activeItems.Add(newItem);
                 }
+
                 itemSpawnTimer = 0;
             }
 
@@ -203,19 +243,29 @@ namespace Project_Dingleberry
 
                     if (type == ItemType.Bomb)
                     {
+                        SoundManager.PlayItemBomb();
+
                         int enemiesToDestroy = enemies.Count / 2;
+
                         for (int j = 0; j < enemiesToDestroy; j++)
                         {
-                            if (enemies.Count > 0) enemies.RemoveAt(0);
+                            if (enemies.Count > 0)
+                            {
+                                enemies.RemoveAt(0);
+                            }
                         }
                     }
                     else if (type == ItemType.Life)
                     {
+                        SoundManager.PlayItemLife();
                         player.AddLife();
                     }
                     else if (type == ItemType.Mine)
                     {
+                        SoundManager.PlayItemMine();
+
                         bool tookDamage = player.PlayerHit();
+
                         if (tookDamage && player.Lives <= 0)
                         {
                             TriggerGameOver("You stepped on a mine!");
@@ -235,7 +285,9 @@ namespace Project_Dingleberry
 
                     if (tookDamage)
                     {
+                        SoundManager.PlayPlayerHit();
                         enemies.RemoveAt(i);
+
                         if (player.Lives <= 0)
                         {
                             TriggerGameOver("You got swarmed!");
@@ -252,6 +304,8 @@ namespace Project_Dingleberry
         {
             isGameOver = true;
             survivalTimer.Stop();
+
+            SoundManager.PlayGameOver();
 
             string finalTime = survivalTimer.Elapsed.ToString(@"mm\:ss");
 
@@ -277,8 +331,15 @@ namespace Project_Dingleberry
         {
             if (!isGameOver) player.DrawEntity(g);
 
-            foreach (var item in activeItems) { item.DrawEntity(g); }
-            foreach (var enemy in enemies) { enemy.DrawEntity(g); }
+            foreach (var item in activeItems)
+            {
+                item.DrawEntity(g);
+            }
+
+            foreach (var enemy in enemies)
+            {
+                enemy.DrawEntity(g);
+            }
 
             using (Font hudFont = new Font("Arial", 16, FontStyle.Bold))
             {
@@ -287,11 +348,13 @@ namespace Project_Dingleberry
 
                 string timeText = $"Time: {survivalTimer.Elapsed.ToString(@"mm\:ss")}";
                 SizeF textSize = g.MeasureString(timeText, hudFont);
-                g.DrawString(timeText, hudFont, Brushes.Black, new PointF(gameForm.ClientSize.Width - textSize.Width - 10, 10));
+                g.DrawString(timeText, hudFont, Brushes.Black,
+                    new PointF(gameForm.ClientSize.Width - textSize.Width - 10, 10));
 
                 string diffText = $"Level: {difficultyLevel}";
                 SizeF diffSize = g.MeasureString(diffText, hudFont);
-                g.DrawString(diffText, hudFont, Brushes.DarkRed, new PointF((gameForm.ClientSize.Width / 2) - (diffSize.Width / 2), 10));
+                g.DrawString(diffText, hudFont, Brushes.DarkRed,
+                    new PointF((gameForm.ClientSize.Width / 2) - (diffSize.Width / 2), 10));
             }
 
             if (isPaused && !isGameOver)

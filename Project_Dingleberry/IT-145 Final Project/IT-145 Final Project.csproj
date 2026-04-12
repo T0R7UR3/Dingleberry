@@ -17,6 +17,14 @@
     <None Remove="Assets\Images\extra_life.png" />
     <None Remove="Assets\Images\half_enemy.png" />
     <None Remove="Assets\Images\john_stick.png" />
+    <None Remove="Assets\Sounds\sfx_GameOver.wav" />
+    <None Remove="Assets\Sounds\sfx_ItemBomb.wav" />
+    <None Remove="Assets\Sounds\sfx_ItemLife.wav" />
+    <None Remove="Assets\Sounds\sfx_ItemMine.wav" />
+    <None Remove="Assets\Sounds\sfx_MenuHighScore.wav" />
+    <None Remove="Assets\Sounds\sfx_MenuInstructions.wav" />
+    <None Remove="Assets\Sounds\sfx_MenuStart.wav" />
+    <None Remove="Assets\Sounds\sfx_PlayerHit.wav" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,6 +49,34 @@
     <Content Include="Assets\Images\john_stick.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\Sounds\sfx_GameOver.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sounds\sfx_ItemBomb.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sounds\sfx_ItemLife.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sounds\sfx_ItemMine.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sounds\sfx_MenuHighScore.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sounds\sfx_MenuInstructions.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sounds\sfx_MenuStart.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sounds\sfx_PlayerHit.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NAudio" Version="2.3.0" />
   </ItemGroup>
 
   <ItemGroup>
