@@ -11,13 +11,52 @@ namespace Project_Dingleberry
         public const double InvincibilitySeconds = 1.5;
         public const double DiagonalMultiplier = 0.707;
 
+        public const int DashSpeedMultiplier = 3;
+        public const double DashDurationSeconds = 0.3;
+        public const double DashCooldownSeconds = 3.0;
+
         public bool IsMovingUp, IsMovingDown, IsMovingLeft, IsMovingRight;
 
         private int lives = 3;
         private DateTime lastHit = DateTime.MinValue;
+        private DateTime dashStartTime = DateTime.MinValue;
+        private DateTime lastDashTime = DateTime.MinValue;
 
         public int Lives => lives;
-        public bool IsInvincible => (DateTime.Now - lastHit).TotalSeconds < InvincibilitySeconds;
+
+        public bool IsHitInvincible =>
+            (DateTime.Now - lastHit).TotalSeconds < InvincibilitySeconds;
+
+        public bool IsDashing =>
+            (DateTime.Now - dashStartTime).TotalSeconds < DashDurationSeconds;
+
+        public bool IsInvincible => IsHitInvincible || IsDashing;
+
+        public bool DashReady =>
+            (DateTime.Now - lastDashTime).TotalSeconds >= DashCooldownSeconds;
+
+        public double DashCooldownRemaining
+        {
+            get
+            {
+                double remaining = DashCooldownSeconds - (DateTime.Now - lastDashTime).TotalSeconds;
+                return remaining > 0 ? remaining : 0;
+            }
+        }
+
+        public double DashChargePercent
+        {
+            get
+            {
+                double elapsed = (DateTime.Now - lastDashTime).TotalSeconds;
+                double percent = elapsed / DashCooldownSeconds;
+
+                if (percent < 0) return 0;
+                if (percent > 1) return 1;
+
+                return percent;
+            }
+        }
 
         public Player(string fileName) : base(fileName, Color.Blue)
         {
@@ -38,6 +77,24 @@ namespace Project_Dingleberry
             }
         }
 
+        public void TryDash()
+        {
+            bool isTryingToMove = IsMovingUp || IsMovingDown || IsMovingLeft || IsMovingRight;
+
+            if (!isTryingToMove)
+            {
+                return;
+            }
+
+            if (!DashReady)
+            {
+                return;
+            }
+
+            dashStartTime = DateTime.Now;
+            lastDashTime = dashStartTime;
+        }
+
         public void ProcessMovement()
         {
             double moveX = 0;
@@ -54,8 +111,12 @@ namespace Project_Dingleberry
                 moveY *= DiagonalMultiplier;
             }
 
-            posX += (int)(moveX * PlayerSpeed);
-            posY += (int)(moveY * PlayerSpeed);
+            int currentSpeed = IsDashing
+                ? PlayerSpeed * DashSpeedMultiplier
+                : PlayerSpeed;
+
+            posX += (int)(moveX * currentSpeed);
+            posY += (int)(moveY * currentSpeed);
         }
 
         public void ClampToScreen(int screenWidth, int screenHeight)
@@ -89,7 +150,7 @@ namespace Project_Dingleberry
 
         public override void DrawEntity(Graphics g)
         {
-            if (IsInvincible)
+            if (IsHitInvincible)
             {
                 if ((DateTime.Now.Millisecond / 100) % 2 == 0)
                 {

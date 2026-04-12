@@ -36,10 +36,13 @@ namespace Project_Dingleberry
         {
             base.OnKeyDown(e);
             var p = controller.GetPlayer();
+
             if (e.KeyCode == Keys.W || e.KeyCode == Keys.Up) p.IsMovingUp = true;
             if (e.KeyCode == Keys.S || e.KeyCode == Keys.Down) p.IsMovingDown = true;
             if (e.KeyCode == Keys.A || e.KeyCode == Keys.Left) p.IsMovingLeft = true;
             if (e.KeyCode == Keys.D || e.KeyCode == Keys.Right) p.IsMovingRight = true;
+
+            if (e.KeyCode == Keys.Space) p.TryDash();
 
             if (e.KeyCode == Keys.P || e.KeyCode == Keys.Escape) controller.TogglePause();
         }

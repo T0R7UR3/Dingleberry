@@ -499,13 +499,42 @@ internal class GameController
         string livesText = "Lives: " + player.Lives;
         g.DrawString(livesText, hudFont, Brushes.Black, new PointF(10, 10));
 
+        SizeF livesSize = g.MeasureString(livesText, hudFont);
+
+        string dashText = player.DashReady
+            ? "Dash READY"
+            : "Dash " + player.DashCooldownRemaining.ToString("0.0") + "s";
+
+        float dashTextX = 10 + livesSize.Width + 20;
+        g.DrawString(dashText, hudFont, Brushes.DarkBlue, new PointF(dashTextX, 10));
+
+        SizeF dashTextSize = g.MeasureString(dashText, hudFont);
+
         string timeText = "Time " + survivalTimer.Elapsed.ToString(@"mm\:ss");
-        SizeF textSize = g.MeasureString(timeText, hudFont);
+        SizeF timeSize = g.MeasureString(timeText, hudFont);
+        float timeTextX = gameForm.ClientSize.Width - timeSize.Width - 10;
+
+        int dashBarX = (int)(dashTextX + dashTextSize.Width + 15);
+        int dashBarY = 12;
+        int dashBarHeight = 16;
+
+        int maxDashBarWidth = (int)(timeTextX - dashBarX - 20);
+        int dashBarWidth = Math.Max(80, Math.Min(140, maxDashBarWidth));
+
+        Rectangle dashBarOutline = new Rectangle(dashBarX, dashBarY, dashBarWidth, dashBarHeight);
+        g.DrawRectangle(Pens.Black, dashBarOutline);
+
+        int dashFillWidth = (int)((dashBarWidth - 4) * player.DashChargePercent);
+        if (dashFillWidth > 0)
+        {
+            g.FillRectangle(Brushes.DeepSkyBlue, dashBarX + 2, dashBarY + 2, dashFillWidth, dashBarHeight - 4);
+        }
+
         g.DrawString(
             timeText,
             hudFont,
             Brushes.Black,
-            new PointF(gameForm.ClientSize.Width - textSize.Width - 10, 10)
+            new PointF(timeTextX, 10)
         );
 
         string diffText = "Level " + difficultyLevel;
