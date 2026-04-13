@@ -30,14 +30,14 @@ Dynamic items spawn every 5 seconds, forcing you to abandon safe corners:
 
 | Sprite | Item | Effect |
 | :--- | :--- | :--- |
-| <img src="Assets/Images/half_enemy.png" width="40"> | **Smart Bomb** | A screen-wipe mechanic that obliterates 50% of the current swarm. |
-| <img src="Assets/Images/extra_life.png" width="40"> | **Extra Life** | High-value health regeneration that adds +1 to your life count. |
-| <img src="Assets/Images/bomb_mine.png" width="40"> | **Landmine** | Stationary hazards that cost a life if stepped on, but clear all other mines. |
+| <img src="Project_Dingleberry/IT-145 Final Project/Assets/Images/half_enemy.png" width="40"> | **Smart Bomb** | A screen-wipe mechanic that obliterates 50% of the current swarm. |
+| <img src="Project_Dingleberry/IT-145 Final Project/Assets/Images/extra_life.png" width="40"> | **Extra Life** | High-value health regeneration that adds +1 to your life count. |
+| <img src="Project_Dingleberry/IT-145 Final Project/Assets/Images/bomb_mine.png" width="40"> | **Landmine** | Stationary hazards that cost a life if stepped on, but clear all other mines. |
 
 ### 3. Kinetic AI Swarm
-* <img src="Assets/Images/enemy_chaser.png" width="40"> **Chaser**: Relentless pathfinding AI that tracks player coordinates.
-* <img src="Assets/Images/enemy_bouncer.png" width="40"> **Bouncer**: High-speed physics-based entities that ricochet off screen boundaries.
-* <img src="Assets/Images/enemy_drifter.png" width="40"> **Drifter**: Unpredictable, random-walk AI designed to break player patterns.
+* <img src="Project_Dingleberry/IT-145 Final Project/Assets/Images/enemy_chaser.png" width="40"> **Chaser**: Relentless pathfinding AI that tracks player coordinates.
+* <img src="Project_Dingleberry/IT-145 Final Project/Assets/Images/enemy_bouncer.png" width="40"> **Bouncer**: High-speed physics-based entities that ricochet off screen boundaries.
+* <img src="Project_Dingleberry/IT-145 Final Project/Assets/Images/enemy_drifter.png" width="40"> **Drifter**: Unpredictable, random-walk AI designed to break player patterns.
 
 ---
 
