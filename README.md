@@ -26,18 +26,18 @@ You control **John Stick** (Our Hero). In a world of evil stickmen, movement and
 The game utilizes a precision survival clock to manage tension. Every **15 seconds**, the game level increases, bumping the enemy cap by **+5** and aggressively decreasing the spawn interval. By the 2-minute mark, the arena becomes a test of near-perfect micro-movement.
 
 ### 2. Risk/Reward Item System
-Dynamic items spawn every 5 seconds, forcing you to abandon safe corners:
+[cite_start]Dynamic items spawn every 5 seconds, forcing you to abandon safe corners[cite: 19, 23]:
 
 | Sprite | Item | Effect |
 | :--- | :--- | :--- |
-| <img src="Project_Dingleberry/IT-145 Final Project/Assets/Images/half_enemy.png" width="40"> | **Smart Bomb** | A screen-wipe mechanic that obliterates 50% of the current swarm. |
-| <img src="Project_Dingleberry/IT-145 Final Project/Assets/Images/extra_life.png" width="40"> | **Extra Life** | High-value health regeneration that adds +1 to your life count. |
-| <img src="Project_Dingleberry/IT-145 Final Project/Assets/Images/bomb_mine.png" width="40"> | **Landmine** | Stationary hazards that cost a life if stepped on, but clear all other mines. |
+| <kbd><img src="Project_Dingleberry/IT-145 Final Project/Assets/Images/half_enemy.png" width="40"></kbd> | **Smart Bomb** | [cite_start]A screen-wipe mechanic that obliterates 50% of the current swarm[cite: 19, 23]. |
+| <kbd><img src="Project_Dingleberry/IT-145 Final Project/Assets/Images/extra_life.png" width="40"></kbd> | **Extra Life** | [cite_start]High-value health regeneration that adds +1 to your life count[cite: 19, 23]. |
+| <kbd><img src="Project_Dingleberry/IT-145 Final Project/Assets/Images/bomb_mine.png" width="40"></kbd> | **Landmine** | [cite_start]Stationary hazards that cost a life if stepped on, but clear all other mines[cite: 19, 23]. |
 
 ### 3. Kinetic AI Swarm
-* <img src="Project_Dingleberry/IT-145 Final Project/Assets/Images/enemy_chaser.png" width="40"> **Chaser**: Relentless pathfinding AI that tracks player coordinates.
-* <img src="Project_Dingleberry/IT-145 Final Project/Assets/Images/enemy_bouncer.png" width="40"> **Bouncer**: High-speed physics-based entities that ricochet off screen boundaries.
-* <img src="Project_Dingleberry/IT-145 Final Project/Assets/Images/enemy_drifter.png" width="40"> **Drifter**: Unpredictable, random-walk AI designed to break player patterns.
+* [cite_start]<kbd><img src="Project_Dingleberry/IT-145 Final Project/Assets/Images/enemy_chaser.png" width="40"></kbd> **Chaser**: Relentless pathfinding AI that tracks player coordinates[cite: 19, 20].
+* [cite_start]<kbd><img src="Project_Dingleberry/IT-145 Final Project/Assets/Images/enemy_bouncer.png" width="40"></kbd> **Bouncer**: High-speed physics-based entities that ricochet off screen boundaries[cite: 19, 20].
+* [cite_start]<kbd><img src="Project_Dingleberry/IT-145 Final Project/Assets/Images/enemy_drifter.png" width="40"></kbd> **Drifter**: Unpredictable, random-walk AI designed to break player patterns[cite: 19, 20].
 
 ---
 
