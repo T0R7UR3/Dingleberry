@@ -1,3 +1,10 @@
+// Project: John Stick
+// Course: IT145 Foundations of Application Development
+// Authors: Murdock MacAskill, Beth, and Landen
+// File: John_Stick.cs
+// Purpose: Controls the main menu, splash screen, and menu navigation.
+// Date: 04/17/2026
+
 using System;
 using System.Drawing;
 using System.Windows.Forms;

@@ -1,5 +1,12 @@
 ﻿#pragma warning disable IDE0130
 
+// Project: John Stick
+// Course: IT145 Foundations of Application Development
+// Authors: Murdock MacAskill, Beth, and Landen
+// File: GameController.cs
+// Purpose: Manages the core game loop, enemy spawning, items, collisions, difficulty, and drawing.
+// Date: 04/17/2026
+
 using System.Diagnostics;
 
 namespace Project_Dingleberry;

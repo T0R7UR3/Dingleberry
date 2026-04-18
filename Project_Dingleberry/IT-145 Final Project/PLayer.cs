@@ -1,4 +1,11 @@
-﻿using System;
+﻿// Project: John Stick
+// Course: IT145 Foundations of Application Development
+// Authors: Murdock MacAskill, Beth, and Landen
+// File: Player.cs
+// Purpose: Defines the player character, movement, dash, lives, and invincibility behavior.
+// Date: 04/17/2026
+
+using System;
 using System.Drawing;
 
 namespace Project_Dingleberry

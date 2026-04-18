@@ -1,4 +1,11 @@
-﻿using System;
+﻿// Project: John Stick
+// Course: IT145 Foundations of Application Development
+// Authors: Murdock MacAskill, Beth, and Landen
+// File: HighScoreManager.cs
+// Purpose: Saves, reads, and sorts high score data for the game.
+// Date: 04/17/2026
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;

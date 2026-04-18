@@ -1,5 +1,12 @@
 ﻿#pragma warning disable IDE0130
 
+// Project: John Stick
+// Course: IT145 Foundations of Application Development
+// Authors: Murdock MacAskill, Beth, and Landen
+// File: SoundManager.cs
+// Purpose: Loads, caches, and plays sound effects used in the game.
+// Date: 04/17/2026
+
 using System;
 using System.Collections.Generic;
 using System.IO;

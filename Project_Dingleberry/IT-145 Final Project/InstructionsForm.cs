@@ -1,4 +1,11 @@
-﻿using System;
+﻿// Project: John Stick
+// Course: IT145 Foundations of Application Development
+// Authors: Murdock MacAskill, Beth, and Landen
+// File: InstructionsForm.cs
+// Purpose: Displays the instructions screen and explains controls, items, and enemies.
+// Date: 04/17/2026
+
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
