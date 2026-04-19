@@ -250,6 +250,11 @@ internal class GameController
 
     public void Update()
     {
+        if (gameForm.ActiveControl != null)
+        {
+            Debug.WriteLine("Focused Control: " + gameForm.ActiveControl.Name);
+        }
+
         if (isGameOver || isPaused)
         {
             return;

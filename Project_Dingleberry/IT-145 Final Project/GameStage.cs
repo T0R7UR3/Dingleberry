@@ -11,7 +11,7 @@ namespace Project_Dingleberry
 
         public GameStage()
         {
-            // NEW: Set resolution to 1080p!
+            // Set resolution to 1080p
             this.Size = new Size(1920, 1080);
             this.Text = "Project Dingleberry - Battle Zone";
             this.BackColor = Color.White;
@@ -25,6 +25,20 @@ namespace Project_Dingleberry
             gameTimer.Interval = 16;
             gameTimer.Tick += (s, e) => controller.Update();
             gameTimer.Start();
+
+            // FIX: Ensure this window captures the keyboard immediately upon loading
+            this.Focus();
+        }
+
+        // FIX: Tell WinForms that Arrow Keys are for the game, not for switching buttons
+        protected override bool ProcessDialogKey(Keys keyData)
+        {
+            if (keyData == Keys.Left || keyData == Keys.Right ||
+                keyData == Keys.Up || keyData == Keys.Down)
+            {
+                return false;
+            }
+            return base.ProcessDialogKey(keyData);
         }
 
         public void RestartGame()

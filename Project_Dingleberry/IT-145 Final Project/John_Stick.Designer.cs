@@ -17,7 +17,6 @@
 
         private void InitializeComponent()
         {
-            title = new TextBox();
             play = new Button();
             high_scores = new Button();
             exit = new Button();
@@ -25,20 +24,6 @@
             pictureBox1 = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
-            // 
-            // title
-            // 
-            title.BackColor = Color.Black;
-            title.BorderStyle = BorderStyle.None;
-            title.Font = new Font("Arial", 72F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            title.ForeColor = Color.Black;
-            title.Location = new Point(322, 112);
-            title.Margin = new Padding(6);
-            title.Name = "title";
-            title.Size = new Size(991, 221);
-            title.TabIndex = 3;
-            title.Text = "John Stick";
-            title.TextAlign = HorizontalAlignment.Center;
             // 
             // play
             // 
@@ -127,7 +112,6 @@
             Controls.Add(exit);
             Controls.Add(high_scores);
             Controls.Add(play);
-            Controls.Add(title);
             Margin = new Padding(6);
             Name = "John_Stick";
             Text = "Project Dingleberry: Battle Zone";
@@ -138,7 +122,6 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox title;
         private System.Windows.Forms.Button play;
         private System.Windows.Forms.Button high_scores;
         private System.Windows.Forms.Button exit;
