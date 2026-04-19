@@ -1,4 +1,11 @@
-﻿using System;
+﻿// Project: John Stick
+// Course: IT145 Foundations of Application Development
+// Authors: Murdock MacAskill, Beth, and Landen
+// File: GameStage.cs
+// Purpose: Creates the main game window and runs the game timer.
+// Date: 04/17/2026
+
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 

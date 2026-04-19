@@ -1,4 +1,11 @@
-﻿using System;
+﻿// Project: John Stick
+// Course: IT145 Foundations of Application Development
+// Authors: Murdock MacAskill, Beth, and Landen
+// File: Entity.cs
+// Purpose: Provides shared position, image, drawing, and hitbox behavior for game objects.
+// Date: 04/17/2026
+
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
